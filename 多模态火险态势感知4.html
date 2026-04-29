@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模态火险态势感知</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
+            /* 替换为新的背景图 */
+            background: url('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/83df7ff2ed44450595ee028211633eac.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260428183409B0A381C8846FEC645A43&rrcfp=8a172a1a&x-expires=1777977250&x-signature=RnfY6%2FnqGlZLXMKXhnh3kPuV5gg%3D') no-repeat center center fixed;
+            background-size: cover;
+            color: #e5e9f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at top, rgba(0, 60, 120, 0.3), transparent),
+                radial-gradient(ellipse at bottom, rgba(0, 20, 40, 0.5), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .dashboard { 
+            max-width: 1920px; 
+            margin: 0 auto; 
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00d9ff;
+        }
+        .corner-tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .corner-tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+        .corner-br { bottom: 0; right: 0; border-left: none; border-top: none; }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: linear-gradient(135deg, rgba(0, 60, 120, 0.2), rgba(0, 20, 40, 0.3));
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 0;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: 
+                0 0 30px rgba(0, 217, 255, 0.2),
+                inset 0 0 30px rgba(0, 217, 255, 0.05);
+        }
+        
+        .header::before, .header::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00d9ff, transparent);
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .header::after {
+            top: auto;
+            bottom: 0;
+        }
+        
+        h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 
+                0 0 10px rgba(0, 217, 255, 0.8),
+                0 0 20px rgba(0, 217, 255, 0.5),
+                0 0 30px rgba(0, 217, 255, 0.3);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #64b5f6;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 25px;
+            position: relative;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(0, 217, 255, 0.05);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), transparent);
+            pointer-events: none;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.2);
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #00d9ff;
+            box-shadow: 0 0 10px #00d9ff;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .video-preview {
+            background: #000000;
+            border: 2px solid rgba(0, 217, 255, 0.4);
+            aspect-ratio: 16/9;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 20px rgba(0, 217, 255, 0.3),
+                inset 0 0 30px rgba(0, 100, 200, 0.2);
+            cursor: pointer; /* 新增：添加点击光标 */
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(0, 100, 200, 0.15), transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(0, 150, 255, 0.1), transparent 50%),
+                #000000;
+            color: #00d9ff;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        
+        .video-placeholder.upload-mode {
+            background: #0a0f1a;
+            color: #64b5f6;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .detection-overlay {
+            position: absolute;
+            border: 3px solid #ff3d3d;
+            box-shadow: 
+                0 0 20px rgba(255, 50, 50, 0.8),
+                inset 0 0 20px rgba(255, 50, 50, 0.3);
+            display: none;
+            animation: detectPulse 1.5s infinite;
+        }
+        
+        @keyframes detectPulse {
+            0%, 100% { 
+                border-color: #ff3d3d;
+                box-shadow: 0 0 20px rgba(255, 50, 50, 0.8), inset 0 0 20px rgba(255, 50, 50, 0.3);
+            }
+            50% { 
+                border-color: #ff6666;
+                box-shadow: 0 0 30px rgba(255, 50, 50, 1), inset 0 0 30px rgba(255, 50, 50, 0.5);
+            }
+        }
+        
+        .detection-label {
+            position: absolute;
+            background: linear-gradient(135deg, #ff3d3d, #ff6666);
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            top: -30px;
+            left: 0;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 50, 50, 0.6);
+        }
+        
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .mode-btn {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #64b5f6;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .mode-btn:hover {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #00d9ff, #0088cc);
+            border-color: #00d9ff;
+            color: #000000;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+        }
+        
+        /* 三个检测模态框 */
+        .detection-modes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .detection-mode-card {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer; /* 新增：添加点击光标 */
+        }
+        
+        .detection-mode-card:hover {
+            border-color: #00d9ff;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .detection-mode-card .mode-title {
+            color: #00d9ff;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .detection-mode-card .mode-preview {
+            aspect-ratio: 16/9;
+            background: radial-gradient(circle, rgba(0, 100, 200, 0.25), rgba(0, 20, 40, 0.9));
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a7fa5;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            /* 新增：图片适配样式 */
+            overflow: hidden;
+        }
+        
+        /* 新增：图片样式（RGB/IR/DETECT共用） */
+        .mode-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .detection-mode-card:hover .mode-preview {
+            border-color: #00d9ff;
+            background: radial-gradient(circle, rgba(0, 150, 255, 0.35), rgba(0, 20, 40, 0.9));
+        }
+        
+        .status-badge {
+            padding: 25px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            border: 2px solid;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .status-badge:hover::before {
+            left: 100%;
+        }
+        
+        .status-normal {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border-color: #2ecc71;
+            box-shadow: 
+                0 0 20px rgba(46, 204, 113, 0.3),
+                inset 0 0 20px rgba(46, 204, 113, 0.1);
+        }
+        
+        .status-warning {
+            background: rgba(241, 196, 15, 0.1);
+            color: #f1c40f;
+            border-color: #f1c40f;
+            box-shadow: 
+                0 0 20px rgba(241, 196, 15, 0.3),
+                inset 0 0 20px rgba(241, 196, 15, 0.1);
+        }
+        
+        .status-alarm {
+            background: rgba(231, 76, 60, 0.1);
+            color: #ff5555;
+            border-color: #ff5555;
+            box-shadow: 
+                0 0 30px rgba(255, 50, 50, 0.5),
+                inset 0 0 30px rgba(255, 50, 50, 0.2);
+            animation: alarmPulse 1s infinite;
+        }
+        
+        @keyframes alarmPulse {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 30px rgba(255, 50, 50, 0.5), inset 0 0 30px rgba(255, 50, 50, 0.2);
+            }
+            50% { 
+                opacity: 0.85;
+                box-shadow: 0 0 50px rgba(255, 50, 50, 0.8), inset 0 0 50px rgba(255, 50, 50, 0.3);
+            }
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+        }
+        
+        .metric-item {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
+        }
+        
+        .metric-label {
+            color: #8892b0;
+            font-size: 12px;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .alert-list {
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        
+        .alert-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .alert-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .alert-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.5);
+            border-radius: 3px;
+        }
+        
+        .alert-item {
+            background: linear-gradient(135deg, rgba(255, 50, 50, 0.1), rgba(100, 20, 20, 0.2));
+            border-left: 4px solid #ff5555;
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .alert-item::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, transparent, #ff5555, transparent);
+        }
+        
+        .alert-time {
+            color: #8892b0;
+            font-size: 11px;
+        }
+        
+        .alert-message {
+            color: #ff8a8a;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .sys-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+        
+        .sys-row:last-child {
+            border-bottom: none;
+        }
+        
+        .control-panel {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 25px;
+            position: relative;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(0, 217, 255, 0.05);
+        }
+        
+        .control-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.2);
+            font-size: 16px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        
+        .control-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #00d9ff;
+            box-shadow: 0 0 10px #00d9ff;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            border: 2px solid;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 150, 200, 0.3));
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00d9ff, #0088cc);
+            color: #000000;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(200, 150, 0, 0.3));
+            border-color: #f1c40f;
+            color: #f1c40f;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #f1c40f, #e6b800);
+            color: #000000;
+            box-shadow: 0 0 25px rgba(241, 196, 15, 0.6);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(200, 50, 40, 0.3));
+            border-color: #e74c3c;
+            color: #ff5555;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
+        }
+        
+        .btn-test {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(180, 100, 20, 0.3));
+            border-color: #e67e22;
+            color: #e67e22;
+        }
+        
+        .btn-test:hover {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(230, 126, 34, 0.6);
+        }
+        
+        .btn-simulate {
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.2), rgba(120, 50, 150, 0.3));
+            border-color: #8e44ad;
+            color: #9b59b6;
+        }
+        
+        .btn-simulate:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(142, 68, 173, 0.6);
+        }
+        
+        .btn-pause {
+            background: linear-gradient(135deg, rgba(100, 116, 139, 0.2), rgba(80, 90, 110, 0.3));
+            border-color: #64748b;
+            color: #94a3b8;
+        }
+        
+        .btn-pause:hover {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(100, 116, 139, 0.6);
+        }
+        
+        .simulate-status {
+            text-align: center;
+            margin-top: 20px;
+            color: #00d9ff;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(0, 217, 255, 0.1);
+            padding: 10px 20px;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .audio-hint {
+            text-align: center;
+            color: #6c7a96;
+            font-size: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(0, 217, 255, 0.2);
+        }
+        
+        .metrics-footer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer; /* 新增：添加点击光标 */
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d9ff, transparent);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.3);
+        }
+        
+        .big-number {
+            font-size: 42px;
+            color: #00d9ff;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+        }
+        
+        .trend-up {
+            color: #2ecc71;
+            font-size: 14px;
+        }
+        
+        .trend-down {
+            color: #e74c3c;
+            font-size: 14px;
+        }
+        
+        .video-section.alarm-border {
+            border-color: #ff3d3d;
+            box-shadow: 
+                0 0 40px rgba(255, 50, 50, 0.6),
+                inset 0 0 30px rgba(255, 50, 50, 0.2);
+            animation: borderFlash 1s infinite;
+        }
+        
+        @keyframes borderFlash {
+            0%, 100% {
+                border-color: #ff3d3d;
+                box-shadow: 0 0 40px rgba(255, 50, 50, 0.6), inset 0 0 30px rgba(255, 50, 50, 0.2);
+            }
+            50% {
+                border-color: #ff6666;
+                box-shadow: 0 0 60px rgba(255, 50, 50, 0.9), inset 0 0 50px rgba(255, 50, 50, 0.3);
+            }
+        }
+        
+        .glow-text {
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.4);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 217, 255, 0.9), 0 0 30px rgba(0, 217, 255, 0.6), 0 0 40px rgba(0, 217, 255, 0.4);
+            }
+        }
+
+        /* ========== 新增：弹窗样式（调整后） ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 10, 20, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(5, 15, 30, 0.98));
+            border: 2px solid #00d9ff;
+            border-radius: 8px;
+            padding: 30px;
+            /* 关键调整：增大弹窗尺寸 */
+            max-width: 95%;  /* 从90%提升到95% */
+            max-height: 95%; /* 从90%提升到95% */
+            width: fit-content;
+            height: fit-content;
+            min-width: 800px; /* 新增：设置最小宽度 */
+            min-height: 600px; /* 新增：设置最小高度 */
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.5);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            overflow: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            color: #00d9ff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            z-index: 10000;
+        }
+
+        .modal-close:hover {
+            background: #00d9ff;
+            color: #000;
+            box-shadow: 0 0 20px #00d9ff;
+        }
+
+        /* 弹窗内图片/视频容器通用样式（调整后） */
+        .modal-media-container {
+            /* 关键调整：增大媒体容器尺寸 */
+            max-width: 100%;
+            max-height: 90vh; /* 从80vh提升到90vh */
+            height: 80vh; /* 新增：设置固定高度 */
+            width: 100%; /* 新增：宽度100% */
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            border: 2px solid rgba(0, 217, 255, 0.5);
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 弹窗内图片样式 */
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 从cover改为contain，确保完整显示 */
+        }
+
+        /* 弹窗内视频占位符样式（调整后） */
+        .modal-video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(0, 100, 200, 0.15), transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(0, 150, 255, 0.1), transparent 50%),
+                #000000;
+            color: #00d9ff;
+            font-size: 32px; /* 从24px增大到32px */
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* 弹窗内统计卡片样式 */
+        .modal-metric-card {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .modal-metric-card .big-number {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        .modal-metric-card .metric-desc {
+            font-size: 24px;
+            color: #64b5f6;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    
+    <div class="dashboard">
+        <div class="header">
+            <div class="corner-decoration corner-tl"></div>
+            <div class="corner-decoration corner-tr"></div>
+            <h1 class="glow-text">多模态火险态势感知</h1>
+            <div class="subtitle">Multimodal Fusion · Real-Time Fire Risk Intelligence</div>
+            <div class="corner-decoration corner-bl"></div>
+            <div class="corner-decoration corner-br"></div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card" id="videoSection">
+                <div class="card-header">
+                    <span class="card-title">📹 双光融合监控</span>
+                    <div class="mode-switch">
+                        <button class="mode-btn active" id="liveModeBtn">实时监控</button>
+                        <button class="mode-btn" id="uploadModeBtn">上传视频</button>
+                        <input type="file" id="fileInput" accept="video/*" style="display:none">
+                    </div>
+                </div>
+                <!-- 为主视频容器添加data属性 -->
+                <div class="video-preview" id="videoContainer" 
+                     data-type="main-video" 
+                     data-title="双光融合实时监控">
+                    <div class="video-placeholder" id="videoPlaceholder">[ REAL-TIME MONITORING ]</div>
+                    <div class="detection-overlay" id="detectionBox">
+                        <div class="detection-label">🔥 FLAME 98.5%</div>
+                    </div>
+                </div>
+                <div class="detection-modes">
+                    <!-- RGB卡片：添加data属性标识类型和内容 -->
+                    <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" 
+                         data-src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D">
+                        <div class="mode-title">RGB</div>
+                        <div class="mode-preview">
+                            <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D" 
+                                 class="mode-preview-img" 
+                                 alt="RGB火焰检测图">
+                        </div>
+                    </div>
+                    <!-- IR卡片：添加data属性 -->
+                    <div class="detection-mode-card" data-type="image" data-title="红外火焰检测"
+                         data-src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D">
+                        <div class="mode-title">IR</div>
+                        <div class="mode-preview">
+                            <img src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D" 
+                                 class="mode-preview-img" 
+                                 alt="红外火焰检测图">
+                        </div>
+                    </div>
+                    <!-- DETECT卡片：添加data属性 -->
+                    <div class="detection-mode-card" data-type="image" data-title="火焰检测结果"
+                         data-src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D">
+                        <div class="mode-title">DETECT</div>
+                        <div class="mode-preview">
+                            <img src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D" 
+                                 class="mode-preview-img" 
+                                 alt="火焰检测图">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="status-badge status-normal" id="statusDisplay">✅ NORMAL</div>
+                <div class="metric-row">
+                    <div class="metric-item">
+                        <div class="metric-value" id="alertCountDisplay">0</div>
+                        <div class="metric-label">今日报警</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">28.5</div>
+                        <div class="metric-label">GFLOPs</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">91.2%</div>
+                        <div class="metric-label">mAP</div>
+                    </div>
+                </div>
+                <div class="card-header" style="margin-top:10px;">
+                    <span class="card-title">🚨 近期报警记录</span>
+                </div>
+                <div class="alert-list" id="alertList">
+                    <div style="text-align:center;color:#6c7a96;padding:20px;">暂无报警</div>
+                </div>
+                <div class="card-header" style="margin-top:20px;">
+                    <span class="card-title">⚙️ 系统状态</span>
+                </div>
+                <div class="sys-row"><span>系统时间</span><span id="systemTime">--:--:--</span></div>
+                <div class="sys-row"><span>检测模式</span><span>双模态融合</span></div>
+                <div class="sys-row"><span>设备在线</span><span style="color:#2ecc71;">● 在线</span></div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <div class="control-header">
+                🎛️ 预警控制台
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="setStatus('normal')">✅ 正常模式</button>
+                <button class="btn btn-warning" onclick="setStatus('warning')">⚠️ 预警模式</button>
+                <button class="btn btn-danger" onclick="setStatus('alarm')">🔥 报警模式</button>
+            </div>
+            
+            <div style="width:80%; height:1px; background:linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.3), transparent); margin:20px auto;"></div>
+            
+            <div class="btn-group">
+                <button class="btn btn-test" id="testAlarmBtn">🔊 测试警报</button>
+                <button class="btn btn-simulate" id="startSimulateBtn">▶ 动态模拟</button>
+                <button class="btn btn-pause" id="pauseSimulateBtn">⏸️ 暂停模拟</button>
+            </div>
+            
+            <div style="text-align: center;">
+                <div class="simulate-status" id="simulateStatus">⏸️ 模拟已暂停</div>
+            </div>
+            
+            <div class="audio-hint">
+                🔊 点击页面任意位置激活警报音效
+            </div>
+        </div>
+
+        <div class="metrics-footer">
+            <!-- 准确率卡片：添加data属性 -->
+            <div class="metric-card" data-type="metric" data-value="92.3%" data-title="准确率" data-trend="↑2.1%">
+                <div class="big-number">92.3%</div>
+                <div style="margin-top:10px;">准确率 <span class="trend-up">↑2.1%</span></div>
+            </div>
+            <!-- 召回率卡片：添加data属性 -->
+            <div class="metric-card" data-type="metric" data-value="88.6%" data-title="召回率" data-trend="↑1.5%">
+                <div class="big-number">88.6%</div>
+                <div style="margin-top:10px;">召回率 <span class="trend-up">↑1.5%</span></div>
+            </div>
+            <!-- mAP卡片：添加data属性 -->
+            <div class="metric-card" data-type="metric" data-value="91.2%" data-title="mAP@0.5" data-trend="">
+                <div class="big-number">91.2%</div>
+                <div style="margin-top:10px;">mAP@0.5</div>
+            </div>
+            <!-- GFLOPs卡片：添加data属性 -->
+            <div class="metric-card" data-type="metric" data-value="28.46" data-title="GFLOPs" data-trend="轻量级">
+                <div class="big-number">28.46</div>
+                <div style="margin-top:10px;">GFLOPs <span class="trend-down">轻量级</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：弹窗容器 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-close" id="modalClose">×</div>
+            <!-- 弹窗内容会通过JS动态生成 -->
+        </div>
+    </div>
+
+<script>
+    (function(){
+        let currentStatus = 'normal';
+        let alertCount = 0;
+        let audioCtx = null, oscillator = null, gainNode = null, isAlarmPlaying = false, audioInitialized = false;
+        let simulateInterval = null;
+        const simulateStatusEl = document.getElementById('simulateStatus');
+        const testAlarmBtn = document.getElementById('testAlarmBtn');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const detectionBox = document.getElementById('detectionBox');
+        const videoSection = document.getElementById('videoSection');
+        const alertCountDisplay = document.getElementById('alertCountDisplay');
+        const alertList = document.getElementById('alertList');
+
+        // ========== 新增：弹窗相关变量 ==========
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContent = document.getElementById('modalContent');
+        const modalClose = document.getElementById('modalClose');
+
+        function initAudio() {
+            if (audioInitialized) return;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                audioInitialized = true;
+            } catch(e) {}
+        }
+        document.body.addEventListener('click', ()=> initAudio(), {once: false});
+
+        function playAlarm() {
+            if (!audioCtx) { initAudio(); if(!audioCtx) return; }
+            if (isAlarmPlaying) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            oscillator = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.value = 800;
+            gainNode.gain.value = 0.3;
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            let high = true;
+            let interval = setInterval(() => {
+                if (!isAlarmPlaying) { clearInterval(interval); return; }
+                oscillator.frequency.value = high ? 1200 : 600;
+                high = !high;
+            }, 500);
+            isAlarmPlaying = true;
+            oscillator.onended = () => { isAlarmPlaying = false; clearInterval(interval); };
+        }
+
+        function stopAlarm() {
+            if (oscillator) { try{oscillator.stop(); oscillator.disconnect();}catch(e){} oscillator = null; }
+            if (gainNode) { gainNode.disconnect(); gainNode = null; }
+            isAlarmPlaying = false;
+        }
+
+        function updateTestAlarmButton(isAlarm) {
+            testAlarmBtn.textContent = isAlarm ? '⏹️ 停止警报' : '🔊 测试警报';
+        }
+
+        function showDetection() {
+            const container = document.getElementById('videoContainer');
+            const containerW = container.offsetWidth;
+            const containerH = container.offsetHeight;
+            const labelHeight = 30;
+            
+            const minSize = 80;
+            const maxSize = Math.min(containerW * 0.6, containerH * 0.6, 200);
+            
+            const boxW = Math.floor(Math.random() * (maxSize - minSize) + minSize);
+            const boxH = Math.floor(Math.random() * (maxSize - minSize) + minSize);
+            
+            const maxLeft = containerW - boxW - 4;
+            const maxTop = containerH - boxH - 4;
+            const minTop = labelHeight + 4;
+            
+            const left = Math.floor(Math.random() * (maxLeft + 1));
+            let top = Math.floor(Math.random() * (maxTop + 1));
+            top = Math.max(minTop, top);
+            
+            detectionBox.style.width = boxW + 'px';
+            detectionBox.style.height = boxH + 'px';
+            detectionBox.style.left = left + 'px';
+            detectionBox.style.top = top + 'px';
+            detectionBox.style.display = 'block';
+        }
+
+        function addAlert() {
+            alertCount++;
+            alertCountDisplay.textContent = alertCount;
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN');
+            const item = document.createElement('div');
+            item.className = 'alert-item';
+            item.innerHTML = `<div class="alert-time">${timeStr}</div><div class="alert-message">⚠️ 检测到火焰！请立即处理！</div>`;
+            if (alertList.children.length === 1 && alertList.children[0].innerText.includes('暂无报警')) {
+                alertList.innerHTML = '';
+            }
+            alertList.insertBefore(item, alertList.firstChild);
+            if (alertList.children.length > 5) alertList.removeChild(alertList.lastChild);
+        }
+
+        window.setStatus = function(status) {
+            currentStatus = status;
+            statusDisplay.className = 'status-badge';
+            if (status === 'normal') {
+                statusDisplay.classList.add('status-normal'); statusDisplay.innerHTML = '✅ NORMAL';
+                detectionBox.style.display = 'none'; videoSection.classList.remove('alarm-border'); stopAlarm();
+            } else if (status === 'warning') {
+                statusDisplay.classList.add('status-warning'); statusDisplay.innerHTML = '⚠️ WARNING';
+                detectionBox.style.display = 'none'; videoSection.classList.remove('alarm-border'); stopAlarm();
+            } else {
+                statusDisplay.classList.add('status-alarm'); statusDisplay.innerHTML = '🔥 ALARM';
+                showDetection(); addAlert(); videoSection.classList.add('alarm-border');
+                if(audioInitialized && audioCtx) playAlarm(); else { initAudio(); setTimeout(()=>{ if(audioCtx) playAlarm(); },100); }
+            }
+            updateTestAlarmButton(status === 'alarm');
+        }
+
+        function toggleTestAlarm() {
+            setStatus(currentStatus === 'alarm' ? 'normal' : 'alarm');
+        }
+
+        function updateTime() {
+            document.getElementById('systemTime').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
+        }
+        setInterval(updateTime,1000); updateTime();
+
+        const liveBtn = document.getElementById('liveModeBtn'), uploadBtn = document.getElementById('uploadModeBtn');
+        const fileInput = document.getElementById('fileInput'), videoPlaceholder = document.getElementById('videoPlaceholder');
+        liveBtn.addEventListener('click', ()=>{
+            liveBtn.classList.add('active'); uploadBtn.classList.remove('active');
+            videoPlaceholder.className = 'video-placeholder';
+            videoPlaceholder.innerHTML = '[ REAL-TIME MONITORING ]';
+        });
+        uploadBtn.addEventListener('click', ()=>{
+            uploadBtn.classList.add('active'); liveBtn.classList.remove('active');
+            videoPlaceholder.className = 'video-placeholder upload-mode';
+            videoPlaceholder.innerHTML = '📁 CLICK TO UPLOAD VIDEO\n<span style="font-size:0.7em;">（DEMO MODE）</span>';
+            fileInput.click();
+        });
+        fileInput.addEventListener('change', (e)=>{
+            if(e.target.files.length) videoPlaceholder.innerHTML = `📁 LOADED: ${e.target.files[0].name}`;
+        });
+
+        function startSimulate() {
+            if(simulateInterval) clearInterval(simulateInterval);
+            simulateStatusEl.textContent = '⏳ 动态模拟运行中 (EVERY 3s)';
+            simulateInterval = setInterval(()=>{
+                const arr = ['normal','normal','warning','alarm'];
+                setStatus(arr[Math.floor(Math.random()*arr.length)]);
+            },3000);
+        }
+        function pauseSimulate() {
+            if(simulateInterval) { clearInterval(simulateInterval); simulateInterval = null; }
+            simulateStatusEl.textContent = '⏸️ 模拟已暂停';
+        }
+
+        // ========== 新增：弹窗功能 ==========
+        // 打开弹窗
+        function openModal(card) {
+            const type = card.dataset.type;
+            const title = card.dataset.title;
+            
+            // 清空弹窗内容
+            modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
+            
+            // 根据类型生成不同内容
+            if (type === 'image') {
+                const src = card.dataset.src;
+                modalContent.innerHTML += `
+                    <h2 style="color: #00d9ff; text-align: center; margin-bottom: 20px; letter-spacing: 2px;">${title}</h2>
+                    <div class="modal-media-container">
+                        <img src="${src}" class="modal-img" alt="${title}">
+                    </div>
+                `;
+            } else if (type === 'metric') {
+                const value = card.dataset.value;
+                const trend = card.dataset.trend;
+                const trendHtml = trend ? `<span class="${trend.includes('↑') ? 'trend-up' : 'trend-down'}">${trend}</span>` : '';
+                modalContent.innerHTML += `
+                    <div class="modal-metric-card">
+                        <div class="big-number">${value}</div>
+                        <div class="metric-desc">${title} ${trendHtml}</div>
+                    </div>
+                `;
+            } else if (type === 'main-video') {
+                // 主视频弹窗内容 - 统一使用和图片相同的容器样式
+                const placeholderHtml = videoPlaceholder.innerHTML.replace('\n', '<br>');
+                const detectionHtml = detectionBox.style.display === 'block' ? 
+                    `<div class="detection-overlay" style="${detectionBox.style.cssText}">
+                        <div class="detection-label">🔥 FLAME 98.5%</div>
+                    </div>` : '';
+                
+                modalContent.innerHTML += `
+                    <h2 style="color: #00d9ff; text-align: center; margin-bottom: 20px; letter-spacing: 2px;">${title}</h2>
+                    <div class="modal-media-container">
+                        <div class="modal-video-placeholder">${placeholderHtml}</div>
+                        ${detectionHtml}
+                    </div>
+                `;
+            }
+            
+            // 显示弹窗
+            modalOverlay.classList.add('active');
+            // 重新绑定关闭按钮事件
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            // 禁止页面滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            // 恢复页面滚动
+            document.body.style.overflow = '';
+        }
+
+        // 绑定所有可点击卡片的点击事件
+        function bindCardClickEvents() {
+            // 绑定主视频容器
+            const mainVideoContainer = document.getElementById('videoContainer');
+            mainVideoContainer.addEventListener('click', () => openModal(mainVideoContainer));
+            
+            // 绑定RGB/IR/DETECT卡片
+            const detectionCards = document.querySelectorAll('.detection-mode-card');
+            detectionCards.forEach(card => {
+                card.addEventListener('click', () => openModal(card));
+            });
+            
+            // 绑定底部统计卡片
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach(card => {
+                card.addEventListener('click', () => openModal(card));
+            });
+            
+            // 点击弹窗外层关闭
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // ESC键关闭弹窗
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        }
+
+        // 初始化绑定事件
+        bindCardClickEvents();
+
+        testAlarmBtn.addEventListener('click', toggleTestAlarm);
+        document.getElementById('startSimulateBtn').addEventListener('click', startSimulate);
+        document.getElementById('pauseSimulateBtn').addEventListener('click', pauseSimulate);
+        updateTestAlarmButton(false);
+        simulateStatusEl.textContent = '⏸️ 模拟已暂停';
+    })();
+</script>
+</body>
+</html>
