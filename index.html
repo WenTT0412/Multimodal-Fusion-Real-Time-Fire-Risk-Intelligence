@@ -11,7 +11,6 @@
         
         body {
             font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
-            /* 替换为新的背景图 */
             background: url('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/83df7ff2ed44450595ee028211633eac.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260428183409B0A381C8846FEC645A43&rrcfp=8a172a1a&x-expires=1777977250&x-signature=RnfY6%2FnqGlZLXMKXhnh3kPuV5gg%3D') no-repeat center center fixed;
             background-size: cover;
             color: #e5e9f0;
@@ -176,10 +175,9 @@
             box-shadow: 
                 0 0 20px rgba(0, 217, 255, 0.3),
                 inset 0 0 30px rgba(0, 100, 200, 0.2);
-            cursor: pointer; /* 新增：添加点击光标 */
+            cursor: pointer;
         }
         
-        /* 修改：实时监控图片样式 */
         .video-placeholder {
             width: 100%;
             height: 100%;
@@ -195,7 +193,6 @@
             position: relative;
         }
         
-        /* 新增：实时监控图片样式 */
         .live-monitor-img {
             width: 100%;
             height: 100%;
@@ -277,7 +274,6 @@
             box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
         }
         
-        /* 三个检测模态框 */
         .detection-modes {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -292,7 +288,7 @@
             text-align: center;
             position: relative;
             transition: all 0.3s;
-            cursor: pointer; /* 新增：添加点击光标 */
+            cursor: pointer;
         }
         
         .detection-mode-card:hover {
@@ -322,11 +318,9 @@
             font-weight: 600;
             letter-spacing: 1px;
             transition: all 0.3s;
-            /* 新增：图片适配样式 */
             overflow: hidden;
         }
         
-        /* 新增：图片样式（RGB/IR/DETECT共用） */
         .mode-preview-img {
             width: 100%;
             height: 100%;
@@ -678,7 +672,7 @@
             text-align: center;
             position: relative;
             transition: all 0.3s;
-            cursor: pointer; /* 新增：添加点击光标 */
+            cursor: pointer;
         }
         
         .metric-card::before {
@@ -744,22 +738,22 @@
             }
         }
 
-        /* ========== 新增：弹窗样式（调整后） ========== */
+        /* ========== 优化：高清全屏弹窗样式 ========== */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 10, 20, 0.95);
+            background: rgba(0, 10, 20, 0.98);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            padding: 20px;
+            transition: all 0.4s ease;
+            padding: 10px;
         }
 
         .modal-overlay.active {
@@ -768,22 +762,21 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(5, 15, 30, 0.98));
-            border: 2px solid #00d9ff;
-            border-radius: 8px;
-            padding: 30px;
-            /* 关键调整：增大弹窗尺寸 */
-            max-width: 95%;  /* 从90%提升到95% */
-            max-height: 95%; /* 从90%提升到95% */
-            width: fit-content;
-            height: fit-content;
-            min-width: 800px; /* 新增：设置最小宽度 */
-            min-height: 600px; /* 新增：设置最小高度 */
-            box-shadow: 0 0 50px rgba(0, 217, 255, 0.5);
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.98), rgba(5, 15, 30, 1));
+            border: 3px solid #00d9ff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 98%;
+            max-width: 1600px;
+            height: 95vh;
+            box-shadow: 0 0 80px rgba(0, 217, 255, 0.6);
             position: relative;
-            transform: scale(0.8);
-            transition: transform 0.3s ease;
-            overflow: auto;
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-overlay.active .modal-content {
@@ -792,87 +785,77 @@
 
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #00d9ff;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #00d9ff;
             background: rgba(0, 217, 255, 0.1);
             color: #00d9ff;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             z-index: 10000;
         }
 
         .modal-close:hover {
             background: #00d9ff;
             color: #000;
-            box-shadow: 0 0 20px #00d9ff;
+            box-shadow: 0 0 30px #00d9ff;
+            transform: rotate(90deg);
         }
 
-        /* 弹窗内图片/视频容器通用样式（调整后） */
+        /* 弹窗媒体容器：全屏高清显示 */
         .modal-media-container {
-            /* 关键调整：增大媒体容器尺寸 */
-            max-width: 100%;
-            max-height: 90vh; /* 从80vh提升到90vh */
-            height: 80vh; /* 新增：设置固定高度 */
-            width: 100%; /* 新增：宽度100% */
-            aspect-ratio: 16/9;
-            object-fit: contain;
-            border: 2px solid rgba(0, 217, 255, 0.5);
+            width: 100%;
+            height: 90%;
             background: #000;
+            border: 3px solid rgba(0, 217, 255, 0.8);
             position: relative;
             overflow: hidden;
-        }
-
-        /* 弹窗内图片样式 */
-        .modal-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* 从cover改为contain，确保完整显示 */
-        }
-
-        /* 弹窗内视频占位符样式（调整后） */
-        .modal-video-placeholder {
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: 
-                radial-gradient(circle at 30% 40%, rgba(0, 100, 200, 0.15), transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(0, 150, 255, 0.1), transparent 50%),
-                #000000;
-            color: #00d9ff;
-            font-size: 32px; /* 从24px增大到32px */
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            flex-direction: column;
-            gap: 15px;
         }
 
-        /* 弹窗内统计卡片样式 */
+        /* 弹窗图片：自适应全屏高清 */
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* 弹窗标题 */
+        .modal-title {
+            color: #00d9ff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+        }
+
+        /* 弹窗统计数据样式 */
         .modal-metric-card {
-            padding: 40px;
             text-align: center;
+            padding: 50px;
         }
 
         .modal-metric-card .big-number {
-            font-size: 72px;
-            margin-bottom: 20px;
+            font-size: 100px;
+            margin-bottom: 30px;
         }
 
         .modal-metric-card .metric-desc {
-            font-size: 24px;
+            font-size: 32px;
             color: #64b5f6;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
     </style>
 </head>
@@ -899,12 +882,11 @@
                         <input type="file" id="fileInput" accept="video/*" style="display:none">
                     </div>
                 </div>
-                <!-- 为主视频容器添加data属性 -->
+                <!-- 主监控：点击弹窗 -->
                 <div class="video-preview" id="videoContainer" 
                      data-type="main-video" 
                      data-title="双光融合实时监控">
                     <div class="video-placeholder" id="videoPlaceholder">
-                        <!-- 核心修改：添加实时监控图片 -->
                         <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
                              class="live-monitor-img" 
                              alt="实时监控画面">
@@ -915,7 +897,7 @@
                     </div>
                 </div>
                 <div class="detection-modes">
-                    <!-- RGB卡片：添加data属性标识类型和内容 -->
+                    <!-- RGB：点击弹窗 -->
                     <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" 
                          data-src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D">
                         <div class="mode-title">RGB</div>
@@ -925,7 +907,7 @@
                                  alt="RGB火焰检测图">
                         </div>
                     </div>
-                    <!-- IR卡片：添加data属性 -->
+                    <!-- IR：点击弹窗 -->
                     <div class="detection-mode-card" data-type="image" data-title="红外火焰检测"
                          data-src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D">
                         <div class="mode-title">IR</div>
@@ -935,7 +917,7 @@
                                  alt="红外火焰检测图">
                         </div>
                     </div>
-                    <!-- DETECT卡片：添加data属性 -->
+                    <!-- DETECT：点击弹窗 -->
                     <div class="detection-mode-card" data-type="image" data-title="火焰检测结果"
                          data-src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D">
                         <div class="mode-title">DETECT</div>
@@ -1008,22 +990,18 @@
         </div>
 
         <div class="metrics-footer">
-            <!-- 准确率卡片：删除上升百分比 -->
             <div class="metric-card" data-type="metric" data-value="0.888" data-title="Precision" data-trend="">
                 <div class="big-number">0.888</div>
                 <div style="margin-top:10px;">Precision</div>
             </div>
-            <!-- 召回率卡片：删除上升百分比 -->
             <div class="metric-card" data-type="metric" data-value="0.857" data-title="Recall" data-trend="">
                 <div class="big-number">0.857</div>
                 <div style="margin-top:10px;">Recall</div>
             </div>
-            <!-- mAP卡片：保持不变 -->
             <div class="metric-card" data-type="metric" data-value="0.837" data-title="mAP@0.5" data-trend="">
                 <div class="big-number">0.837</div>
                 <div style="margin-top:10px;">mAP@0.5</div>
             </div>
-            <!-- GFLOPs卡片：保持不变 -->
             <div class="metric-card" data-type="metric" data-value="28.46" data-title="GFLOPs" data-trend="轻量级">
                 <div class="big-number">28.46</div>
                 <div style="margin-top:10px;">GFLOPs <span class="trend-down">轻量级</span></div>
@@ -1031,11 +1009,10 @@
         </div>
     </div>
 
-    <!-- 新增：弹窗容器 -->
+    <!-- 全屏弹窗容器 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content" id="modalContent">
             <div class="modal-close" id="modalClose">×</div>
-            <!-- 弹窗内容会通过JS动态生成 -->
         </div>
     </div>
 
@@ -1053,11 +1030,12 @@
         const alertCountDisplay = document.getElementById('alertCountDisplay');
         const alertList = document.getElementById('alertList');
 
-        // ========== 新增：弹窗相关变量 ==========
+        // 弹窗核心变量
         const modalOverlay = document.getElementById('modalOverlay');
         const modalContent = document.getElementById('modalContent');
         const modalClose = document.getElementById('modalClose');
 
+        // 音频初始化
         function initAudio() {
             if (audioInitialized) return;
             try {
@@ -1067,6 +1045,7 @@
         }
         document.body.addEventListener('click', ()=> initAudio(), {once: false});
 
+        // 警报音效
         function playAlarm() {
             if (!audioCtx) { initAudio(); if(!audioCtx) return; }
             if (isAlarmPlaying) return;
@@ -1099,6 +1078,7 @@
             testAlarmBtn.textContent = isAlarm ? '⏹️ 停止警报' : '🔊 测试警报';
         }
 
+        // 火焰检测框显示
         function showDetection() {
             const container = document.getElementById('videoContainer');
             const containerW = container.offsetWidth;
@@ -1126,6 +1106,7 @@
             detectionBox.style.display = 'block';
         }
 
+        // 添加报警记录
         function addAlert() {
             alertCount++;
             alertCountDisplay.textContent = alertCount;
@@ -1141,6 +1122,7 @@
             if (alertList.children.length > 5) alertList.removeChild(alertList.lastChild);
         }
 
+        // 状态切换
         window.setStatus = function(status) {
             currentStatus = status;
             statusDisplay.className = 'status-badge';
@@ -1162,16 +1144,17 @@
             setStatus(currentStatus === 'alarm' ? 'normal' : 'alarm');
         }
 
+        // 系统时间
         function updateTime() {
             document.getElementById('systemTime').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
         }
         setInterval(updateTime,1000); updateTime();
 
+        // 视频模式切换
         const liveBtn = document.getElementById('liveModeBtn'), uploadBtn = document.getElementById('uploadModeBtn');
         const fileInput = document.getElementById('fileInput'), videoPlaceholder = document.getElementById('videoPlaceholder');
         liveBtn.addEventListener('click', ()=>{
             liveBtn.classList.add('active'); uploadBtn.classList.remove('active');
-            // 修改：切换回实时监控时恢复图片显示
             videoPlaceholder.className = 'video-placeholder';
             videoPlaceholder.innerHTML = `
                 <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
@@ -1190,6 +1173,7 @@
             if(e.target.files.length) videoPlaceholder.innerHTML = `📁 LOADED: ${e.target.files[0].name}`;
         });
 
+        // 模拟检测
         function startSimulate() {
             if(simulateInterval) clearInterval(simulateInterval);
             simulateStatusEl.textContent = '⏳ 动态模拟运行中 (EVERY 3s)';
@@ -1203,104 +1187,87 @@
             simulateStatusEl.textContent = '⏸️ 模拟已暂停';
         }
 
-        // ========== 新增：弹窗功能 ==========
-        // 打开弹窗
+        // ========== 优化：弹窗功能 ==========
+        // 打开高清弹窗
         function openModal(card) {
             const type = card.dataset.type;
             const title = card.dataset.title;
             
-            // 清空弹窗内容
+            // 重置弹窗内容
             modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
             
-            // 根据类型生成不同内容
-            if (type === 'image') {
-                const src = card.dataset.src;
+            // 图片弹窗（RGB/IR/DETECT/主监控）
+            if (type === 'image' || type === 'main-video') {
+                const src = type === 'main-video' 
+                    ? "https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D"
+                    : card.dataset.src;
+
                 modalContent.innerHTML += `
-                    <h2 style="color: #00d9ff; text-align: center; margin-bottom: 20px; letter-spacing: 2px;">${title}</h2>
+                    <div class="modal-title">${title}</div>
                     <div class="modal-media-container">
                         <img src="${src}" class="modal-img" alt="${title}">
-                    </div>
-                `;
-            } else if (type === 'metric') {
-                const value = card.dataset.value;
-                const trend = card.dataset.trend;
-                const trendHtml = trend ? `<span class="${trend.includes('↑') ? 'trend-up' : 'trend-down'}">${trend}</span>` : '';
-                modalContent.innerHTML += `
-                    <div class="modal-metric-card">
-                        <div class="big-number">${value}</div>
-                        <div class="metric-desc">${title} ${trendHtml}</div>
-                    </div>
-                `;
-            } else if (type === 'main-video') {
-                // 主视频弹窗内容 - 统一使用和图片相同的容器样式
-                // 修改：弹窗中也显示实时监控图片
-                modalContent.innerHTML += `
-                    <h2 style="color: #00d9ff; text-align: center; margin-bottom: 20px; letter-spacing: 2px;">${title}</h2>
-                    <div class="modal-media-container">
-                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
-                             class="modal-img" 
-                             alt="实时监控画面">
-                        ${detectionBox.style.display === 'block' ? 
+                        ${type === 'main-video' && detectionBox.style.display === 'block' ? 
                             `<div class="detection-overlay" style="${detectionBox.style.cssText}">
                                 <div class="detection-label">🔥 FLAME 98.5%</div>
                             </div>` : ''}
+                    </div>
+                `;
+            } 
+            // 统计数据弹窗
+            else if (type === 'metric') {
+                const value = card.dataset.value;
+                modalContent.innerHTML += `
+                    <div class="modal-metric-card">
+                        <div class="big-number">${value}</div>
+                        <div class="metric-desc">${title}</div>
                     </div>
                 `;
             }
             
             // 显示弹窗
             modalOverlay.classList.add('active');
-            // 重新绑定关闭按钮事件
-            document.getElementById('modalClose').addEventListener('click', closeModal);
-            // 禁止页面滚动
             document.body.style.overflow = 'hidden';
+            // 重新绑定关闭按钮
+            document.getElementById('modalClose').addEventListener('click', closeModal);
         }
 
         // 关闭弹窗
         function closeModal() {
             modalOverlay.classList.remove('active');
-            // 恢复页面滚动
             document.body.style.overflow = '';
         }
 
-        // 绑定所有可点击卡片的点击事件
+        // 绑定所有点击事件
         function bindCardClickEvents() {
-            // 绑定主视频容器
-            const mainVideoContainer = document.getElementById('videoContainer');
-            mainVideoContainer.addEventListener('click', () => openModal(mainVideoContainer));
+            // 主监控弹窗
+            document.getElementById('videoContainer').addEventListener('click', (e) => {
+                openModal(e.currentTarget);
+            });
             
-            // 绑定RGB/IR/DETECT卡片
-            const detectionCards = document.querySelectorAll('.detection-mode-card');
-            detectionCards.forEach(card => {
+            // RGB/IR/DETECT 弹窗
+            document.querySelectorAll('.detection-mode-card').forEach(card => {
                 card.addEventListener('click', () => openModal(card));
             });
             
-            // 绑定底部统计卡片
-            const metricCards = document.querySelectorAll('.metric-card');
-            metricCards.forEach(card => {
+            // 底部指标弹窗
+            document.querySelectorAll('.metric-card').forEach(card => {
                 card.addEventListener('click', () => openModal(card));
             });
             
-            // 点击弹窗外层关闭
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
-            });
-            
-            // ESC键关闭弹窗
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                    closeModal();
-                }
-            });
+            // 点击空白处关闭
+            modalOverlay.addEventListener('click', (e) => e.target === modalOverlay && closeModal());
+            // ESC键关闭
+            document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
         }
 
-        // 初始化绑定事件
+        // 初始化
         bindCardClickEvents();
-
         testAlarmBtn.addEventListener('click', toggleTestAlarm);
         document.getElementById('startSimulateBtn').addEventListener('click', startSimulate);
         document.getElementById('pauseSimulateBtn').addEventListener('click', pauseSimulate);
         updateTestAlarmButton(false);
-        simulateStatusEl.textContent
+        pauseSimulate(); // 修复初始状态
+    })();
+</script>
+</body>
+</html>
