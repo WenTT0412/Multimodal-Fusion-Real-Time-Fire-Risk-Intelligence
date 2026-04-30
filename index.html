@@ -11,7 +11,7 @@
         
         body {
             font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
-            /* 背景图使用完整URL，无需修改 */
+            /* 替换为新的背景图 */
             background: url('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/83df7ff2ed44450595ee028211633eac.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260428183409B0A381C8846FEC645A43&rrcfp=8a172a1a&x-expires=1777977250&x-signature=RnfY6%2FnqGlZLXMKXhnh3kPuV5gg%3D') no-repeat center center fixed;
             background-size: cover;
             color: #e5e9f0;
@@ -179,21 +179,30 @@
             cursor: pointer; /* 新增：添加点击光标 */
         }
         
+        /* 修改：实时监控图片样式 */
         .video-placeholder {
             width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: 
-                radial-gradient(circle at 30% 40%, rgba(0, 100, 200, 0.15), transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(0, 150, 255, 0.1), transparent 50%),
-                #000000;
+            background: #000000;
             color: #00d9ff;
             font-size: 20px;
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
+            position: relative;
+        }
+        
+        /* 新增：实时监控图片样式 */
+        .live-monitor-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         
         .video-placeholder.upload-mode {
@@ -866,10 +875,6 @@
             letter-spacing: 2px;
         }
     </style>
-    <!-- 如果有外部CSS文件，需要这样修改路径 -->
-    <!-- <link rel="stylesheet" href="/Multimodal Fusion · Real-Time Fire Risk Intelligence/style.css"> -->
-    <!-- 如果有外部JS文件，需要这样修改路径 -->
-    <!-- <script src="/Multimodal Fusion · Real-Time Fire Risk Intelligence/script.js"></script> -->
 </head>
 <body>
     <div class="grid-bg"></div>
@@ -898,7 +903,13 @@
                 <div class="video-preview" id="videoContainer" 
                      data-type="main-video" 
                      data-title="双光融合实时监控">
-                    <div class="video-placeholder" id="videoPlaceholder">[ REAL-TIME MONITORING ]</div>
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <!-- 核心修改：添加实时监控图片 -->
+                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
+                             class="live-monitor-img" 
+                             alt="实时监控画面">
+                        [ REAL-TIME MONITORING ]
+                    </div>
                     <div class="detection-overlay" id="detectionBox">
                         <div class="detection-label">🔥 FLAME 98.5%</div>
                     </div>
@@ -949,7 +960,7 @@
                         <div class="metric-label">GFLOPs</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">91.2%</div>
+                        <div class="metric-value">0.837</div>
                         <div class="metric-label">mAP</div>
                     </div>
                 </div>
@@ -997,22 +1008,22 @@
         </div>
 
         <div class="metrics-footer">
-            <!-- 准确率卡片：添加data属性 -->
-            <div class="metric-card" data-type="metric" data-value="92.3%" data-title="准确率" data-trend="↑2.1%">
-                <div class="big-number">92.3%</div>
-                <div style="margin-top:10px;">准确率 <span class="trend-up">↑2.1%</span></div>
+            <!-- 准确率卡片：删除上升百分比 -->
+            <div class="metric-card" data-type="metric" data-value="0.888" data-title="Precision" data-trend="">
+                <div class="big-number">0.888</div>
+                <div style="margin-top:10px;">Precision</div>
             </div>
-            <!-- 召回率卡片：添加data属性 -->
-            <div class="metric-card" data-type="metric" data-value="88.6%" data-title="召回率" data-trend="↑1.5%">
-                <div class="big-number">88.6%</div>
-                <div style="margin-top:10px;">召回率 <span class="trend-up">↑1.5%</span></div>
+            <!-- 召回率卡片：删除上升百分比 -->
+            <div class="metric-card" data-type="metric" data-value="0.857" data-title="Recall" data-trend="">
+                <div class="big-number">0.857</div>
+                <div style="margin-top:10px;">Recall</div>
             </div>
-            <!-- mAP卡片：添加data属性 -->
-            <div class="metric-card" data-type="metric" data-value="91.2%" data-title="mAP@0.5" data-trend="">
-                <div class="big-number">91.2%</div>
+            <!-- mAP卡片：保持不变 -->
+            <div class="metric-card" data-type="metric" data-value="0.837" data-title="mAP@0.5" data-trend="">
+                <div class="big-number">0.837</div>
                 <div style="margin-top:10px;">mAP@0.5</div>
             </div>
-            <!-- GFLOPs卡片：添加data属性 -->
+            <!-- GFLOPs卡片：保持不变 -->
             <div class="metric-card" data-type="metric" data-value="28.46" data-title="GFLOPs" data-trend="轻量级">
                 <div class="big-number">28.46</div>
                 <div style="margin-top:10px;">GFLOPs <span class="trend-down">轻量级</span></div>
@@ -1160,8 +1171,14 @@
         const fileInput = document.getElementById('fileInput'), videoPlaceholder = document.getElementById('videoPlaceholder');
         liveBtn.addEventListener('click', ()=>{
             liveBtn.classList.add('active'); uploadBtn.classList.remove('active');
+            // 修改：切换回实时监控时恢复图片显示
             videoPlaceholder.className = 'video-placeholder';
-            videoPlaceholder.innerHTML = '[ REAL-TIME MONITORING ]';
+            videoPlaceholder.innerHTML = `
+                <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
+                     class="live-monitor-img" 
+                     alt="实时监控画面">
+                [ REAL-TIME MONITORING ]
+            `;
         });
         uploadBtn.addEventListener('click', ()=>{
             uploadBtn.classList.add('active'); liveBtn.classList.remove('active');
@@ -1216,17 +1233,17 @@
                 `;
             } else if (type === 'main-video') {
                 // 主视频弹窗内容 - 统一使用和图片相同的容器样式
-                const placeholderHtml = videoPlaceholder.innerHTML.replace('\n', '<br>');
-                const detectionHtml = detectionBox.style.display === 'block' ? 
-                    `<div class="detection-overlay" style="${detectionBox.style.cssText}">
-                        <div class="detection-label">🔥 FLAME 98.5%</div>
-                    </div>` : '';
-                
+                // 修改：弹窗中也显示实时监控图片
                 modalContent.innerHTML += `
                     <h2 style="color: #00d9ff; text-align: center; margin-bottom: 20px; letter-spacing: 2px;">${title}</h2>
                     <div class="modal-media-container">
-                        <div class="modal-video-placeholder">${placeholderHtml}</div>
-                        ${detectionHtml}
+                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
+                             class="modal-img" 
+                             alt="实时监控画面">
+                        ${detectionBox.style.display === 'block' ? 
+                            `<div class="detection-overlay" style="${detectionBox.style.cssText}">
+                                <div class="detection-label">🔥 FLAME 98.5%</div>
+                            </div>` : ''}
                     </div>
                 `;
             }
@@ -1289,9 +1306,5 @@
         simulateStatusEl.textContent = '⏸️ 模拟已暂停';
     })();
 </script>
-<!-- 如果有本地音频/视频/图片文件，需要这样修改路径 -->
-<!-- <img src="/Multimodal Fusion · Real-Time Fire Risk Intelligence/images/background.png"> -->
-<!-- <video src="/Multimodal Fusion · Real-Time Fire Risk Intelligence/videos/demo.mp4"></video> -->
-<!-- <audio src="/Multimodal Fusion · Real-Time Fire Risk Intelligence/audio/alarm.mp3"></audio> -->
 </body>
 </html>
