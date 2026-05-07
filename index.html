@@ -923,31 +923,44 @@
             text-align: center;
         }
 
-        /* 置信度等级样式 */
-        .confidence-level-high {
-            color: #00d9ff;
-            border-color: #00d9ff;
-            box-shadow: 0 0 12px rgba(0, 217, 255, 0.7);
+        /* 置信度数值样式（根据范围） */
+        .confidence-value-safe {
+            color: #2ecc71;
+            border-color: #2ecc71;
+            box-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
         }
 
-        .confidence-level-low {
+        .confidence-value-low {
             color: #f1c40f;
             border-color: #f1c40f;
             box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
         }
 
-        /* 风险等级样式 */
-        .risk-level-high {
+        .confidence-value-high {
             color: #ff5555;
             border-color: #ff5555;
             box-shadow: 0 0 15px rgba(255, 85, 85, 0.8);
             animation: alarmPulse 1s infinite;
         }
 
-        .risk-level-low {
+        /* 风险等级样式 */
+        .risk-level-safe {
             color: #2ecc71;
             border-color: #2ecc71;
             box-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
+        }
+
+        .risk-level-low {
+            color: #f1c40f;
+            border-color: #f1c40f;
+            box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
+        }
+
+        .risk-level-high {
+            color: #ff5555;
+            border-color: #ff5555;
+            box-shadow: 0 0 15px rgba(255, 85, 85, 0.8);
+            animation: alarmPulse 1s infinite;
         }
     </style>
 </head>
@@ -1022,15 +1035,15 @@
                     </div>
                 </div>
 
-                <!-- 置信度判断板块（重新设计：置信度+风险等级） -->
+                <!-- 置信度判断板块（数值 + 风险等级） -->
                 <div class="confidence-section">
                     <div class="confidence-item">
                         <span class="confidence-item-label">置信度</span>
-                        <span class="confidence-item-value confidence-level-high" id="confidenceLevel">HIGH</span>
+                        <span class="confidence-item-value confidence-value-safe" id="confidenceValue">0.15</span>
                     </div>
                     <div class="confidence-item">
                         <span class="confidence-item-label">风险等级</span>
-                        <span class="confidence-item-value risk-level-low" id="riskLevel">LOW</span>
+                        <span class="confidence-item-value risk-level-safe" id="riskLevel">NO FIRE</span>
                     </div>
                 </div>
 
@@ -1120,7 +1133,7 @@
             const videoSection = document.getElementById('videoSection');
             const alertCountDisplay = document.getElementById('alertCountDisplay');
             const alertList = document.getElementById('alertList');
-            const confidenceLevelEl = document.getElementById('confidenceLevel');
+            const confidenceValueEl = document.getElementById('confidenceValue');
             const riskLevelEl = document.getElementById('riskLevel');
 
             const modalOverlay = document.getElementById('modalOverlay');
@@ -1209,24 +1222,32 @@
                 if (alertList.children.length > 5) alertList.removeChild(alertList.lastChild);
             }
 
-            function updateConfidenceLevels(status) {
+            function getRandomInRange(min, max) {
+                return (Math.random() * (max - min) + min).toFixed(2);
+            }
+
+            function updateConfidenceDisplay(status) {
+                let confValue, confClass, riskText, riskClass;
                 if (status === 'normal') {
-                    confidenceLevelEl.textContent = 'HIGH';
-                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
-                    riskLevelEl.textContent = 'LOW';
-                    riskLevelEl.className = 'confidence-item-value risk-level-low';
+                    confValue = getRandomInRange(0.00, 0.30);
+                    confClass = 'confidence-value-safe';
+                    riskText = 'NO FIRE';
+                    riskClass = 'risk-level-safe';
                 } else if (status === 'warning') {
-                    // 预警模式下置信度也设为 HIGH（依据逻辑：高风险必重视，这里预警即高风险）
-                    confidenceLevelEl.textContent = 'HIGH';
-                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
-                    riskLevelEl.textContent = 'HIGH';
-                    riskLevelEl.className = 'confidence-item-value risk-level-high';
-                } else if (status === 'alarm') {
-                    confidenceLevelEl.textContent = 'HIGH';
-                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
-                    riskLevelEl.textContent = 'HIGH';
-                    riskLevelEl.className = 'confidence-item-value risk-level-high';
+                    confValue = getRandomInRange(0.30, 0.70);
+                    confClass = 'confidence-value-low';
+                    riskText = 'LOW';
+                    riskClass = 'risk-level-low';
+                } else {
+                    confValue = getRandomInRange(0.70, 1.00);
+                    confClass = 'confidence-value-high';
+                    riskText = 'HIGH';
+                    riskClass = 'risk-level-high';
                 }
+                confidenceValueEl.textContent = confValue;
+                confidenceValueEl.className = 'confidence-item-value ' + confClass;
+                riskLevelEl.textContent = riskText;
+                riskLevelEl.className = 'confidence-item-value ' + riskClass;
             }
 
             window.setStatus = function(status) {
@@ -1254,7 +1275,7 @@
                     else { initAudio();
                         setTimeout(() => { if (audioCtx) playAlarm(); }, 100); }
                 }
-                updateConfidenceLevels(status);
+                updateConfidenceDisplay(status);
                 updateTestAlarmButton(status === 'alarm');
             };
 
@@ -1368,7 +1389,7 @@
             document.getElementById('pauseSimulateBtn').addEventListener('click', pauseSimulate);
             updateTestAlarmButton(false);
             pauseSimulate();
-            updateConfidenceLevels('normal');
+            updateConfidenceDisplay('normal');
         })();
     </script>
 </body>
