@@ -6,9 +6,9 @@
     <title>多模态火险态势感知</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
-        
+
         body {
             font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
             background: url('https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/83df7ff2ed44450595ee028211633eac.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=20260428183409B0A381C8846FEC645A43&rrcfp=8a172a1a&x-expires=1777977250&x-signature=RnfY6%2FnqGlZLXMKXhnh3kPuV5gg%3D') no-repeat center center fixed;
@@ -18,37 +18,43 @@
             overflow-x: hidden;
             position: relative;
         }
-        
+
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: 
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
                 radial-gradient(ellipse at top, rgba(0, 60, 120, 0.3), transparent),
                 radial-gradient(ellipse at bottom, rgba(0, 20, 40, 0.5), transparent);
             pointer-events: none;
             z-index: 0;
         }
-        
+
         .grid-bg {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
                 linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             pointer-events: none;
             z-index: 1;
         }
-        
-        .dashboard { 
-            max-width: 1920px; 
-            margin: 0 auto; 
+
+        .dashboard {
+            max-width: 1920px;
+            margin: 0 auto;
             padding: 20px;
             position: relative;
             z-index: 2;
         }
-        
+
         .corner-decoration {
             position: absolute;
             width: 40px;
@@ -59,7 +65,7 @@
         .corner-tr { top: 0; right: 0; border-left: none; border-bottom: none; }
         .corner-bl { bottom: 0; left: 0; border-right: none; border-top: none; }
         .corner-br { bottom: 0; right: 0; border-left: none; border-top: none; }
-        
+
         .header {
             text-align: center;
             padding: 30px 20px 20px;
@@ -68,12 +74,13 @@
             border-radius: 0;
             margin-bottom: 30px;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 0 0 30px rgba(0, 217, 255, 0.2),
                 inset 0 0 30px rgba(0, 217, 255, 0.05);
         }
-        
-        .header::before, .header::after {
+
+        .header::before,
+        .header::after {
             content: '';
             position: absolute;
             width: 100px;
@@ -83,57 +90,60 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .header::after {
             top: auto;
             bottom: 0;
         }
-        
+
         h1 {
             font-size: 42px;
             font-weight: 900;
             color: #00d9ff;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 
+            text-shadow:
                 0 0 10px rgba(0, 217, 255, 0.8),
                 0 0 20px rgba(0, 217, 255, 0.5),
                 0 0 30px rgba(0, 217, 255, 0.3);
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             color: #64b5f6;
             font-size: 14px;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        
+
         .main-grid {
             display: grid;
             grid-template-columns: 1.8fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
-        
+
         .card {
             background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
             border: 1px solid rgba(0, 217, 255, 0.3);
             padding: 25px;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.6),
                 inset 0 0 20px rgba(0, 217, 255, 0.05);
         }
-        
+
         .card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), transparent);
             pointer-events: none;
         }
-        
+
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -143,7 +153,7 @@
             border-bottom: 2px solid rgba(0, 217, 255, 0.2);
             position: relative;
         }
-        
+
         .card-header::after {
             content: '';
             position: absolute;
@@ -154,7 +164,7 @@
             background: #00d9ff;
             box-shadow: 0 0 10px #00d9ff;
         }
-        
+
         .card-title {
             font-size: 16px;
             font-weight: 700;
@@ -165,19 +175,19 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .video-preview {
             background: #000000;
             border: 2px solid rgba(0, 217, 255, 0.4);
             aspect-ratio: 16/9;
             position: relative;
             overflow: hidden;
-            box-shadow: 
+            box-shadow:
                 0 0 20px rgba(0, 217, 255, 0.3),
                 inset 0 0 30px rgba(0, 100, 200, 0.2);
             cursor: pointer;
         }
-        
+
         .video-placeholder {
             width: 100%;
             height: 100%;
@@ -192,7 +202,7 @@
             text-transform: uppercase;
             position: relative;
         }
-        
+
         .live-monitor-img {
             width: 100%;
             height: 100%;
@@ -201,35 +211,36 @@
             top: 0;
             left: 0;
         }
-        
+
         .video-placeholder.upload-mode {
             background: #0a0f1a;
             color: #64b5f6;
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .detection-overlay {
             position: absolute;
             border: 3px solid #ff3d3d;
-            box-shadow: 
+            box-shadow:
                 0 0 20px rgba(255, 50, 50, 0.8),
                 inset 0 0 20px rgba(255, 50, 50, 0.3);
             display: none;
             animation: detectPulse 1.5s infinite;
         }
-        
+
         @keyframes detectPulse {
-            0%, 100% { 
+            0%,
+            100% {
                 border-color: #ff3d3d;
                 box-shadow: 0 0 20px rgba(255, 50, 50, 0.8), inset 0 0 20px rgba(255, 50, 50, 0.3);
             }
-            50% { 
+            50% {
                 border-color: #ff6666;
                 box-shadow: 0 0 30px rgba(255, 50, 50, 1), inset 0 0 30px rgba(255, 50, 50, 0.5);
             }
         }
-        
+
         .detection-label {
             position: absolute;
             background: linear-gradient(135deg, #ff3d3d, #ff6666);
@@ -242,12 +253,12 @@
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(255, 50, 50, 0.6);
         }
-        
+
         .mode-switch {
             display: flex;
             gap: 10px;
         }
-        
+
         .mode-btn {
             background: rgba(0, 217, 255, 0.1);
             border: 1px solid rgba(0, 217, 255, 0.3);
@@ -260,27 +271,27 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .mode-btn:hover {
             background: rgba(0, 217, 255, 0.2);
             border-color: #00d9ff;
             color: #00d9ff;
         }
-        
+
         .mode-btn.active {
             background: linear-gradient(135deg, #00d9ff, #0088cc);
             border-color: #00d9ff;
             color: #000000;
             box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
         }
-        
+
         .detection-modes {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-top: 20px;
         }
-        
+
         .detection-mode-card {
             background: rgba(0, 20, 40, 0.6);
             border: 1px solid rgba(0, 217, 255, 0.3);
@@ -290,13 +301,13 @@
             transition: all 0.3s;
             cursor: pointer;
         }
-        
+
         .detection-mode-card:hover {
             border-color: #00d9ff;
             box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
             transform: translateY(-3px);
         }
-        
+
         .detection-mode-card .mode-title {
             color: #00d9ff;
             font-size: 20px;
@@ -305,7 +316,7 @@
             text-transform: uppercase;
             margin-bottom: 15px;
         }
-        
+
         .detection-mode-card .mode-preview {
             aspect-ratio: 16/9;
             background: radial-gradient(circle, rgba(0, 100, 200, 0.25), rgba(0, 20, 40, 0.9));
@@ -320,18 +331,18 @@
             transition: all 0.3s;
             overflow: hidden;
         }
-        
+
         .mode-preview-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .detection-mode-card:hover .mode-preview {
             border-color: #00d9ff;
             background: radial-gradient(circle, rgba(0, 150, 255, 0.35), rgba(0, 20, 40, 0.9));
         }
-        
+
         .status-badge {
             padding: 25px;
             text-align: center;
@@ -344,77 +355,79 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .status-badge::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%;
+            top: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
         }
-        
+
         .status-badge:hover::before {
             left: 100%;
         }
-        
+
         .status-normal {
             background: rgba(46, 204, 113, 0.1);
             color: #2ecc71;
             border-color: #2ecc71;
-            box-shadow: 
+            box-shadow:
                 0 0 20px rgba(46, 204, 113, 0.3),
                 inset 0 0 20px rgba(46, 204, 113, 0.1);
         }
-        
+
         .status-warning {
             background: rgba(241, 196, 15, 0.1);
             color: #f1c40f;
             border-color: #f1c40f;
-            box-shadow: 
+            box-shadow:
                 0 0 20px rgba(241, 196, 15, 0.3),
                 inset 0 0 20px rgba(241, 196, 15, 0.1);
         }
-        
+
         .status-alarm {
             background: rgba(231, 76, 60, 0.1);
             color: #ff5555;
             border-color: #ff5555;
-            box-shadow: 
+            box-shadow:
                 0 0 30px rgba(255, 50, 50, 0.5),
                 inset 0 0 30px rgba(255, 50, 50, 0.2);
             animation: alarmPulse 1s infinite;
         }
-        
+
         @keyframes alarmPulse {
-            0%, 100% { 
+            0%,
+            100% {
                 opacity: 1;
                 box-shadow: 0 0 30px rgba(255, 50, 50, 0.5), inset 0 0 30px rgba(255, 50, 50, 0.2);
             }
-            50% { 
+            50% {
                 opacity: 0.85;
                 box-shadow: 0 0 50px rgba(255, 50, 50, 0.8), inset 0 0 50px rgba(255, 50, 50, 0.3);
             }
         }
-        
+
         .metric-row {
             display: flex;
             justify-content: space-around;
             margin: 25px 0;
         }
-        
+
         .metric-item {
             text-align: center;
         }
-        
+
         .metric-value {
             font-size: 32px;
             font-weight: 700;
             color: #00d9ff;
             text-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
         }
-        
+
         .metric-label {
             color: #8892b0;
             font-size: 12px;
@@ -422,25 +435,25 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .alert-list {
             max-height: 240px;
             overflow-y: auto;
         }
-        
+
         .alert-list::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .alert-list::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.3);
         }
-        
+
         .alert-list::-webkit-scrollbar-thumb {
             background: rgba(0, 217, 255, 0.5);
             border-radius: 3px;
         }
-        
+
         .alert-item {
             background: linear-gradient(135deg, rgba(255, 50, 50, 0.1), rgba(100, 20, 20, 0.2));
             border-left: 4px solid #ff5555;
@@ -448,7 +461,7 @@
             margin-bottom: 10px;
             position: relative;
         }
-        
+
         .alert-item::before {
             content: '';
             position: absolute;
@@ -458,39 +471,39 @@
             width: 3px;
             background: linear-gradient(180deg, transparent, #ff5555, transparent);
         }
-        
+
         .alert-time {
             color: #8892b0;
             font-size: 11px;
         }
-        
+
         .alert-message {
             color: #ff8a8a;
             font-weight: 600;
             margin-top: 5px;
         }
-        
+
         .sys-row {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
             border-bottom: 1px solid rgba(0, 217, 255, 0.1);
         }
-        
+
         .sys-row:last-child {
             border-bottom: none;
         }
-        
+
         .control-panel {
             background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
             border: 1px solid rgba(0, 217, 255, 0.3);
             padding: 25px;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.6),
                 inset 0 0 20px rgba(0, 217, 255, 0.05);
         }
-        
+
         .control-header {
             display: flex;
             align-items: center;
@@ -505,7 +518,7 @@
             letter-spacing: 2px;
             position: relative;
         }
-        
+
         .control-header::after {
             content: '';
             position: absolute;
@@ -516,7 +529,7 @@
             background: #00d9ff;
             box-shadow: 0 0 10px #00d9ff;
         }
-        
+
         .btn-group {
             display: flex;
             flex-wrap: wrap;
@@ -524,7 +537,7 @@
             justify-content: center;
             margin-bottom: 20px;
         }
-        
+
         .btn {
             padding: 12px 28px;
             border: 2px solid;
@@ -539,7 +552,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn::before {
             content: '';
             position: absolute;
@@ -552,89 +565,89 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .btn:active::before {
             width: 300px;
             height: 300px;
         }
-        
+
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 150, 200, 0.3));
             border-color: #00d9ff;
             color: #00d9ff;
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #00d9ff, #0088cc);
             color: #000000;
             box-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
         }
-        
+
         .btn-warning {
             background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(200, 150, 0, 0.3));
             border-color: #f1c40f;
             color: #f1c40f;
         }
-        
+
         .btn-warning:hover {
             background: linear-gradient(135deg, #f1c40f, #e6b800);
             color: #000000;
             box-shadow: 0 0 25px rgba(241, 196, 15, 0.6);
         }
-        
+
         .btn-danger {
             background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(200, 50, 40, 0.3));
             border-color: #e74c3c;
             color: #ff5555;
         }
-        
+
         .btn-danger:hover {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: #ffffff;
             box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
         }
-        
+
         .btn-test {
             background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(180, 100, 20, 0.3));
             border-color: #e67e22;
             color: #e67e22;
         }
-        
+
         .btn-test:hover {
             background: linear-gradient(135deg, #e67e22, #d35400);
             color: #ffffff;
             box-shadow: 0 0 25px rgba(230, 126, 34, 0.6);
         }
-        
+
         .btn-simulate {
             background: linear-gradient(135deg, rgba(142, 68, 173, 0.2), rgba(120, 50, 150, 0.3));
             border-color: #8e44ad;
             color: #9b59b6;
         }
-        
+
         .btn-simulate:hover {
             background: linear-gradient(135deg, #8e44ad, #7d3c98);
             color: #ffffff;
             box-shadow: 0 0 25px rgba(142, 68, 173, 0.6);
         }
-        
+
         .btn-pause {
             background: linear-gradient(135deg, rgba(100, 116, 139, 0.2), rgba(80, 90, 110, 0.3));
             border-color: #64748b;
             color: #94a3b8;
         }
-        
+
         .btn-pause:hover {
             background: linear-gradient(135deg, #64748b, #475569);
             color: #ffffff;
             box-shadow: 0 0 25px rgba(100, 116, 139, 0.6);
         }
-        
+
         .simulate-status {
             text-align: center;
             margin-top: 20px;
@@ -648,7 +661,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .audio-hint {
             text-align: center;
             color: #6c7a96;
@@ -657,14 +670,14 @@
             padding-top: 20px;
             border-top: 1px dashed rgba(0, 217, 255, 0.2);
         }
-        
+
         .metrics-footer {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 25px;
             margin-top: 30px;
         }
-        
+
         .metric-card {
             background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(5, 15, 30, 0.9));
             border: 1px solid rgba(0, 217, 255, 0.3);
@@ -674,48 +687,50 @@
             transition: all 0.3s;
             cursor: pointer;
         }
-        
+
         .metric-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 3px;
             background: linear-gradient(90deg, transparent, #00d9ff, transparent);
         }
-        
+
         .metric-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 217, 255, 0.3);
         }
-        
+
         .big-number {
             font-size: 42px;
             color: #00d9ff;
             font-weight: 700;
             text-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
         }
-        
+
         .trend-up {
             color: #2ecc71;
             font-size: 14px;
         }
-        
+
         .trend-down {
             color: #e74c3c;
             font-size: 14px;
         }
-        
+
         .video-section.alarm-border {
             border-color: #ff3d3d;
-            box-shadow: 
+            box-shadow:
                 0 0 40px rgba(255, 50, 50, 0.6),
                 inset 0 0 30px rgba(255, 50, 50, 0.2);
             animation: borderFlash 1s infinite;
         }
-        
+
         @keyframes borderFlash {
-            0%, 100% {
+            0%,
+            100% {
                 border-color: #ff3d3d;
                 box-shadow: 0 0 40px rgba(255, 50, 50, 0.6), inset 0 0 30px rgba(255, 50, 50, 0.2);
             }
@@ -724,11 +739,11 @@
                 box-shadow: 0 0 60px rgba(255, 50, 50, 0.9), inset 0 0 50px rgba(255, 50, 50, 0.3);
             }
         }
-        
+
         .glow-text {
             animation: textGlow 2s ease-in-out infinite alternate;
         }
-        
+
         @keyframes textGlow {
             from {
                 text-shadow: 0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.4);
@@ -738,7 +753,7 @@
             }
         }
 
-        /* ========== 优化：高清全屏弹窗样式 ========== */
+        /* ========== 高清全屏弹窗样式 ========== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -810,7 +825,6 @@
             transform: rotate(90deg);
         }
 
-        /* 弹窗媒体容器：全屏高清显示 */
         .modal-media-container {
             width: 100%;
             height: 90%;
@@ -823,14 +837,12 @@
             justify-content: center;
         }
 
-        /* 弹窗图片：自适应全屏高清 */
         .modal-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* 弹窗标题 */
         .modal-title {
             color: #00d9ff;
             font-size: 28px;
@@ -841,7 +853,6 @@
             text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
         }
 
-        /* 弹窗统计数据样式 */
         .modal-metric-card {
             text-align: center;
             padding: 50px;
@@ -857,11 +868,92 @@
             color: #64b5f6;
             letter-spacing: 3px;
         }
+
+        /* ========== 重新设计的置信度判断板块 ========== */
+        .confidence-section {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.75), rgba(5, 15, 30, 0.92));
+            border: 1px solid rgba(0, 217, 255, 0.35);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 217, 255, 0.05);
+        }
+
+        .confidence-section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #00d9ff, transparent);
+        }
+
+        .confidence-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .confidence-item-label {
+            color: #8892b0;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .confidence-item-value {
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 5px 16px;
+            border-radius: 2px;
+            transition: all 0.3s;
+            border: 2px solid;
+            background: rgba(0, 0, 0, 0.35);
+            text-shadow: 0 0 8px currentColor;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        /* 置信度等级样式 */
+        .confidence-level-high {
+            color: #00d9ff;
+            border-color: #00d9ff;
+            box-shadow: 0 0 12px rgba(0, 217, 255, 0.7);
+        }
+
+        .confidence-level-low {
+            color: #f1c40f;
+            border-color: #f1c40f;
+            box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
+        }
+
+        /* 风险等级样式 */
+        .risk-level-high {
+            color: #ff5555;
+            border-color: #ff5555;
+            box-shadow: 0 0 15px rgba(255, 85, 85, 0.8);
+            animation: alarmPulse 1s infinite;
+        }
+
+        .risk-level-low {
+            color: #2ecc71;
+            border-color: #2ecc71;
+            box-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
+        }
     </style>
 </head>
 <body>
     <div class="grid-bg"></div>
-    
+
     <div class="dashboard">
         <div class="header">
             <div class="corner-decoration corner-tl"></div>
@@ -882,14 +974,9 @@
                         <input type="file" id="fileInput" accept="video/*" style="display:none">
                     </div>
                 </div>
-                <!-- 主监控：点击弹窗 -->
-                <div class="video-preview" id="videoContainer" 
-                     data-type="main-video" 
-                     data-title="双光融合实时监控">
+                <div class="video-preview" id="videoContainer" data-type="main-video" data-title="双光融合实时监控">
                     <div class="video-placeholder" id="videoPlaceholder">
-                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
-                             class="live-monitor-img" 
-                             alt="实时监控画面">
+                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" class="live-monitor-img" alt="实时监控画面">
                         [ REAL-TIME MONITORING ]
                     </div>
                     <div class="detection-overlay" id="detectionBox">
@@ -897,34 +984,22 @@
                     </div>
                 </div>
                 <div class="detection-modes">
-                    <!-- RGB：点击弹窗 -->
-                    <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" 
-                         data-src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D">
+                    <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" data-src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D">
                         <div class="mode-title">RGB</div>
                         <div class="mode-preview">
-                            <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D" 
-                                 class="mode-preview-img" 
-                                 alt="RGB火焰检测图">
+                            <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D" class="mode-preview-img" alt="RGB火焰检测图">
                         </div>
                     </div>
-                    <!-- IR：点击弹窗 -->
-                    <div class="detection-mode-card" data-type="image" data-title="红外火焰检测"
-                         data-src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D">
+                    <div class="detection-mode-card" data-type="image" data-title="红外火焰检测" data-src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D">
                         <div class="mode-title">IR</div>
                         <div class="mode-preview">
-                            <img src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D" 
-                                 class="mode-preview-img" 
-                                 alt="红外火焰检测图">
+                            <img src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D" class="mode-preview-img" alt="红外火焰检测图">
                         </div>
                     </div>
-                    <!-- DETECT：点击弹窗 -->
-                    <div class="detection-mode-card" data-type="image" data-title="火焰检测结果"
-                         data-src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D">
+                    <div class="detection-mode-card" data-type="image" data-title="火焰检测结果" data-src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D">
                         <div class="mode-title">DETECT</div>
                         <div class="mode-preview">
-                            <img src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D" 
-                                 class="mode-preview-img" 
-                                 alt="火焰检测图">
+                            <img src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D" class="mode-preview-img" alt="火焰检测图">
                         </div>
                     </div>
                 </div>
@@ -946,6 +1021,19 @@
                         <div class="metric-label">mAP</div>
                     </div>
                 </div>
+
+                <!-- 置信度判断板块（重新设计：置信度+风险等级） -->
+                <div class="confidence-section">
+                    <div class="confidence-item">
+                        <span class="confidence-item-label">置信度</span>
+                        <span class="confidence-item-value confidence-level-high" id="confidenceLevel">HIGH</span>
+                    </div>
+                    <div class="confidence-item">
+                        <span class="confidence-item-label">风险等级</span>
+                        <span class="confidence-item-value risk-level-low" id="riskLevel">LOW</span>
+                    </div>
+                </div>
+
                 <div class="card-header" style="margin-top:10px;">
                     <span class="card-title">🚨 近期报警记录</span>
                 </div>
@@ -965,25 +1053,25 @@
             <div class="control-header">
                 🎛️ 预警控制台
             </div>
-            
+
             <div class="btn-group">
                 <button class="btn btn-primary" onclick="setStatus('normal')">✅ 正常模式</button>
                 <button class="btn btn-warning" onclick="setStatus('warning')">⚠️ 预警模式</button>
                 <button class="btn btn-danger" onclick="setStatus('alarm')">🔥 报警模式</button>
             </div>
-            
+
             <div style="width:80%; height:1px; background:linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.3), transparent); margin:20px auto;"></div>
-            
+
             <div class="btn-group">
                 <button class="btn btn-test" id="testAlarmBtn">🔊 测试警报</button>
                 <button class="btn btn-simulate" id="startSimulateBtn">▶ 动态模拟</button>
                 <button class="btn btn-pause" id="pauseSimulateBtn">⏸️ 暂停模拟</button>
             </div>
-            
+
             <div style="text-align: center;">
                 <div class="simulate-status" id="simulateStatus">⏸️ 模拟已暂停</div>
             </div>
-            
+
             <div class="audio-hint">
                 🔊 点击页面任意位置激活警报音效
             </div>
@@ -1009,200 +1097,229 @@
         </div>
     </div>
 
-    <!-- 全屏弹窗容器 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content" id="modalContent">
             <div class="modal-close" id="modalClose">×</div>
         </div>
     </div>
 
-<script>
-    (function(){
-        let currentStatus = 'normal';
-        let alertCount = 0;
-        let audioCtx = null, oscillator = null, gainNode = null, isAlarmPlaying = false, audioInitialized = false;
-        let simulateInterval = null;
-        const simulateStatusEl = document.getElementById('simulateStatus');
-        const testAlarmBtn = document.getElementById('testAlarmBtn');
-        const statusDisplay = document.getElementById('statusDisplay');
-        const detectionBox = document.getElementById('detectionBox');
-        const videoSection = document.getElementById('videoSection');
-        const alertCountDisplay = document.getElementById('alertCountDisplay');
-        const alertList = document.getElementById('alertList');
+    <script>
+        (function() {
+            let currentStatus = 'normal';
+            let alertCount = 0;
+            let audioCtx = null,
+                oscillator = null,
+                gainNode = null,
+                isAlarmPlaying = false,
+                audioInitialized = false;
+            let simulateInterval = null;
+            const simulateStatusEl = document.getElementById('simulateStatus');
+            const testAlarmBtn = document.getElementById('testAlarmBtn');
+            const statusDisplay = document.getElementById('statusDisplay');
+            const detectionBox = document.getElementById('detectionBox');
+            const videoSection = document.getElementById('videoSection');
+            const alertCountDisplay = document.getElementById('alertCountDisplay');
+            const alertList = document.getElementById('alertList');
+            const confidenceLevelEl = document.getElementById('confidenceLevel');
+            const riskLevelEl = document.getElementById('riskLevel');
 
-        // 弹窗核心变量
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalContent = document.getElementById('modalContent');
-        const modalClose = document.getElementById('modalClose');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalContent = document.getElementById('modalContent');
+            const modalClose = document.getElementById('modalClose');
 
-        // 音频初始化
-        function initAudio() {
-            if (audioInitialized) return;
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                audioInitialized = true;
-            } catch(e) {}
-        }
-        document.body.addEventListener('click', ()=> initAudio(), {once: false});
-
-        // 警报音效
-        function playAlarm() {
-            if (!audioCtx) { initAudio(); if(!audioCtx) return; }
-            if (isAlarmPlaying) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            oscillator = audioCtx.createOscillator();
-            gainNode = audioCtx.createGain();
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.value = 800;
-            gainNode.gain.value = 0.3;
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.start();
-            let high = true;
-            let interval = setInterval(() => {
-                if (!isAlarmPlaying) { clearInterval(interval); return; }
-                oscillator.frequency.value = high ? 1200 : 600;
-                high = !high;
-            }, 500);
-            isAlarmPlaying = true;
-            oscillator.onended = () => { isAlarmPlaying = false; clearInterval(interval); };
-        }
-
-        function stopAlarm() {
-            if (oscillator) { try{oscillator.stop(); oscillator.disconnect();}catch(e){} oscillator = null; }
-            if (gainNode) { gainNode.disconnect(); gainNode = null; }
-            isAlarmPlaying = false;
-        }
-
-        function updateTestAlarmButton(isAlarm) {
-            testAlarmBtn.textContent = isAlarm ? '⏹️ 停止警报' : '🔊 测试警报';
-        }
-
-        // 火焰检测框显示
-        function showDetection() {
-            const container = document.getElementById('videoContainer');
-            const containerW = container.offsetWidth;
-            const containerH = container.offsetHeight;
-            const labelHeight = 30;
-            
-            const minSize = 80;
-            const maxSize = Math.min(containerW * 0.6, containerH * 0.6, 200);
-            
-            const boxW = Math.floor(Math.random() * (maxSize - minSize) + minSize);
-            const boxH = Math.floor(Math.random() * (maxSize - minSize) + minSize);
-            
-            const maxLeft = containerW - boxW - 4;
-            const maxTop = containerH - boxH - 4;
-            const minTop = labelHeight + 4;
-            
-            const left = Math.floor(Math.random() * (maxLeft + 1));
-            let top = Math.floor(Math.random() * (maxTop + 1));
-            top = Math.max(minTop, top);
-            
-            detectionBox.style.width = boxW + 'px';
-            detectionBox.style.height = boxH + 'px';
-            detectionBox.style.left = left + 'px';
-            detectionBox.style.top = top + 'px';
-            detectionBox.style.display = 'block';
-        }
-
-        // 添加报警记录
-        function addAlert() {
-            alertCount++;
-            alertCountDisplay.textContent = alertCount;
-            const now = new Date();
-            const timeStr = now.toLocaleString('zh-CN');
-            const item = document.createElement('div');
-            item.className = 'alert-item';
-            item.innerHTML = `<div class="alert-time">${timeStr}</div><div class="alert-message">⚠️ 检测到火焰！请立即处理！</div>`;
-            if (alertList.children.length === 1 && alertList.children[0].innerText.includes('暂无报警')) {
-                alertList.innerHTML = '';
+            function initAudio() {
+                if (audioInitialized) return;
+                try {
+                    audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    audioInitialized = true;
+                } catch (e) {}
             }
-            alertList.insertBefore(item, alertList.firstChild);
-            if (alertList.children.length > 5) alertList.removeChild(alertList.lastChild);
-        }
+            document.body.addEventListener('click', () => initAudio(), { once: false });
 
-        // 状态切换
-        window.setStatus = function(status) {
-            currentStatus = status;
-            statusDisplay.className = 'status-badge';
-            if (status === 'normal') {
-                statusDisplay.classList.add('status-normal'); statusDisplay.innerHTML = '✅ NORMAL';
-                detectionBox.style.display = 'none'; videoSection.classList.remove('alarm-border'); stopAlarm();
-            } else if (status === 'warning') {
-                statusDisplay.classList.add('status-warning'); statusDisplay.innerHTML = '⚠️ WARNING';
-                detectionBox.style.display = 'none'; videoSection.classList.remove('alarm-border'); stopAlarm();
-            } else {
-                statusDisplay.classList.add('status-alarm'); statusDisplay.innerHTML = '🔥 ALARM';
-                showDetection(); addAlert(); videoSection.classList.add('alarm-border');
-                if(audioInitialized && audioCtx) playAlarm(); else { initAudio(); setTimeout(()=>{ if(audioCtx) playAlarm(); },100); }
+            function playAlarm() {
+                if (!audioCtx) { initAudio(); if (!audioCtx) return; }
+                if (isAlarmPlaying) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                oscillator = audioCtx.createOscillator();
+                gainNode = audioCtx.createGain();
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 800;
+                gainNode.gain.value = 0.3;
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                let high = true;
+                let interval = setInterval(() => {
+                    if (!isAlarmPlaying) { clearInterval(interval); return; }
+                    oscillator.frequency.value = high ? 1200 : 600;
+                    high = !high;
+                }, 500);
+                isAlarmPlaying = true;
+                oscillator.onended = () => { isAlarmPlaying = false;
+                    clearInterval(interval); };
             }
-            updateTestAlarmButton(status === 'alarm');
-        }
 
-        function toggleTestAlarm() {
-            setStatus(currentStatus === 'alarm' ? 'normal' : 'alarm');
-        }
+            function stopAlarm() {
+                if (oscillator) { try { oscillator.stop();
+                        oscillator.disconnect(); } catch (e) {} oscillator = null; }
+                if (gainNode) { gainNode.disconnect();
+                    gainNode = null; }
+                isAlarmPlaying = false;
+            }
 
-        // 系统时间
-        function updateTime() {
-            document.getElementById('systemTime').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
-        }
-        setInterval(updateTime,1000); updateTime();
+            function updateTestAlarmButton(isAlarm) {
+                testAlarmBtn.textContent = isAlarm ? '⏹️ 停止警报' : '🔊 测试警报';
+            }
 
-        // 视频模式切换
-        const liveBtn = document.getElementById('liveModeBtn'), uploadBtn = document.getElementById('uploadModeBtn');
-        const fileInput = document.getElementById('fileInput'), videoPlaceholder = document.getElementById('videoPlaceholder');
-        liveBtn.addEventListener('click', ()=>{
-            liveBtn.classList.add('active'); uploadBtn.classList.remove('active');
-            videoPlaceholder.className = 'video-placeholder';
-            videoPlaceholder.innerHTML = `
+            function showDetection() {
+                const container = document.getElementById('videoContainer');
+                const containerW = container.offsetWidth;
+                const containerH = container.offsetHeight;
+                const labelHeight = 30;
+                const minSize = 80;
+                const maxSize = Math.min(containerW * 0.6, containerH * 0.6, 200);
+                const boxW = Math.floor(Math.random() * (maxSize - minSize) + minSize);
+                const boxH = Math.floor(Math.random() * (maxSize - minSize) + minSize);
+                const maxLeft = containerW - boxW - 4;
+                const maxTop = containerH - boxH - 4;
+                const minTop = labelHeight + 4;
+                const left = Math.floor(Math.random() * (maxLeft + 1));
+                let top = Math.floor(Math.random() * (maxTop + 1));
+                top = Math.max(minTop, top);
+                detectionBox.style.width = boxW + 'px';
+                detectionBox.style.height = boxH + 'px';
+                detectionBox.style.left = left + 'px';
+                detectionBox.style.top = top + 'px';
+                detectionBox.style.display = 'block';
+            }
+
+            function addAlert() {
+                alertCount++;
+                alertCountDisplay.textContent = alertCount;
+                const now = new Date();
+                const timeStr = now.toLocaleString('zh-CN');
+                const item = document.createElement('div');
+                item.className = 'alert-item';
+                item.innerHTML =
+                    `<div class="alert-time">${timeStr}</div><div class="alert-message">⚠️ 检测到火焰！请立即处理！</div>`;
+                if (alertList.children.length === 1 && alertList.children[0].innerText.includes('暂无报警')) {
+                    alertList.innerHTML = '';
+                }
+                alertList.insertBefore(item, alertList.firstChild);
+                if (alertList.children.length > 5) alertList.removeChild(alertList.lastChild);
+            }
+
+            function updateConfidenceLevels(status) {
+                if (status === 'normal') {
+                    confidenceLevelEl.textContent = 'HIGH';
+                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
+                    riskLevelEl.textContent = 'LOW';
+                    riskLevelEl.className = 'confidence-item-value risk-level-low';
+                } else if (status === 'warning') {
+                    // 预警模式下置信度也设为 HIGH（依据逻辑：高风险必重视，这里预警即高风险）
+                    confidenceLevelEl.textContent = 'HIGH';
+                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
+                    riskLevelEl.textContent = 'HIGH';
+                    riskLevelEl.className = 'confidence-item-value risk-level-high';
+                } else if (status === 'alarm') {
+                    confidenceLevelEl.textContent = 'HIGH';
+                    confidenceLevelEl.className = 'confidence-item-value confidence-level-high';
+                    riskLevelEl.textContent = 'HIGH';
+                    riskLevelEl.className = 'confidence-item-value risk-level-high';
+                }
+            }
+
+            window.setStatus = function(status) {
+                currentStatus = status;
+                statusDisplay.className = 'status-badge';
+                if (status === 'normal') {
+                    statusDisplay.classList.add('status-normal');
+                    statusDisplay.innerHTML = '✅ NORMAL';
+                    detectionBox.style.display = 'none';
+                    videoSection.classList.remove('alarm-border');
+                    stopAlarm();
+                } else if (status === 'warning') {
+                    statusDisplay.classList.add('status-warning');
+                    statusDisplay.innerHTML = '⚠️ WARNING';
+                    detectionBox.style.display = 'none';
+                    videoSection.classList.remove('alarm-border');
+                    stopAlarm();
+                } else {
+                    statusDisplay.classList.add('status-alarm');
+                    statusDisplay.innerHTML = '🔥 ALARM';
+                    showDetection();
+                    addAlert();
+                    videoSection.classList.add('alarm-border');
+                    if (audioInitialized && audioCtx) playAlarm();
+                    else { initAudio();
+                        setTimeout(() => { if (audioCtx) playAlarm(); }, 100); }
+                }
+                updateConfidenceLevels(status);
+                updateTestAlarmButton(status === 'alarm');
+            };
+
+            function toggleTestAlarm() {
+                setStatus(currentStatus === 'alarm' ? 'normal' : 'alarm');
+            }
+
+            function updateTime() {
+                document.getElementById('systemTime').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            }
+            setInterval(updateTime, 1000);
+            updateTime();
+
+            const liveBtn = document.getElementById('liveModeBtn'),
+                uploadBtn = document.getElementById('uploadModeBtn');
+            const fileInput = document.getElementById('fileInput'),
+                videoPlaceholder = document.getElementById('videoPlaceholder');
+            liveBtn.addEventListener('click', () => {
+                liveBtn.classList.add('active');
+                uploadBtn.classList.remove('active');
+                videoPlaceholder.className = 'video-placeholder';
+                videoPlaceholder.innerHTML = `
                 <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
                      class="live-monitor-img" 
                      alt="实时监控画面">
                 [ REAL-TIME MONITORING ]
             `;
-        });
-        uploadBtn.addEventListener('click', ()=>{
-            uploadBtn.classList.add('active'); liveBtn.classList.remove('active');
-            videoPlaceholder.className = 'video-placeholder upload-mode';
-            videoPlaceholder.innerHTML = '📁 CLICK TO UPLOAD VIDEO\n<span style="font-size:0.7em;">（DEMO MODE）</span>';
-            fileInput.click();
-        });
-        fileInput.addEventListener('change', (e)=>{
-            if(e.target.files.length) videoPlaceholder.innerHTML = `📁 LOADED: ${e.target.files[0].name}`;
-        });
+            });
+            uploadBtn.addEventListener('click', () => {
+                uploadBtn.classList.add('active');
+                liveBtn.classList.remove('active');
+                videoPlaceholder.className = 'video-placeholder upload-mode';
+                videoPlaceholder.innerHTML =
+                    '📁 CLICK TO UPLOAD VIDEO\n<span style="font-size:0.7em;">（DEMO MODE）</span>';
+                fileInput.click();
+            });
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) videoPlaceholder.innerHTML =
+                    `📁 LOADED: ${e.target.files[0].name}`;
+            });
 
-        // 模拟检测
-        function startSimulate() {
-            if(simulateInterval) clearInterval(simulateInterval);
-            simulateStatusEl.textContent = '⏳ 动态模拟运行中 (EVERY 3s)';
-            simulateInterval = setInterval(()=>{
-                const arr = ['normal','normal','warning','alarm'];
-                setStatus(arr[Math.floor(Math.random()*arr.length)]);
-            },3000);
-        }
-        function pauseSimulate() {
-            if(simulateInterval) { clearInterval(simulateInterval); simulateInterval = null; }
-            simulateStatusEl.textContent = '⏸️ 模拟已暂停';
-        }
+            function startSimulate() {
+                if (simulateInterval) clearInterval(simulateInterval);
+                simulateStatusEl.textContent = '⏳ 动态模拟运行中 (EVERY 3s)';
+                simulateInterval = setInterval(() => {
+                    const arr = ['normal', 'normal', 'warning', 'alarm'];
+                    setStatus(arr[Math.floor(Math.random() * arr.length)]);
+                }, 3000);
+            }
 
-        // ========== 优化：弹窗功能 ==========
-        // 打开高清弹窗
-        function openModal(card) {
-            const type = card.dataset.type;
-            const title = card.dataset.title;
-            
-            // 重置弹窗内容
-            modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
-            
-            // 图片弹窗（RGB/IR/DETECT/主监控）
-            if (type === 'image' || type === 'main-video') {
-                const src = type === 'main-video' 
-                    ? "https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D"
-                    : card.dataset.src;
+            function pauseSimulate() {
+                if (simulateInterval) { clearInterval(simulateInterval);
+                    simulateInterval = null; }
+                simulateStatusEl.textContent = '⏸️ 模拟已暂停';
+            }
 
-                modalContent.innerHTML += `
+            function openModal(card) {
+                const type = card.dataset.type;
+                const title = card.dataset.title;
+                modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
+                if (type === 'image' || type === 'main-video') {
+                    const src = type === 'main-video' ?
+                        "https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" :
+                        card.dataset.src;
+                    modalContent.innerHTML += `
                     <div class="modal-title">${title}</div>
                     <div class="modal-media-container">
                         <img src="${src}" class="modal-img" alt="${title}">
@@ -1212,62 +1329,47 @@
                             </div>` : ''}
                     </div>
                 `;
-            } 
-            // 统计数据弹窗
-            else if (type === 'metric') {
-                const value = card.dataset.value;
-                modalContent.innerHTML += `
+                } else if (type === 'metric') {
+                    const value = card.dataset.value;
+                    modalContent.innerHTML += `
                     <div class="modal-metric-card">
                         <div class="big-number">${value}</div>
                         <div class="metric-desc">${title}</div>
                     </div>
                 `;
+                }
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.getElementById('modalClose').addEventListener('click', closeModal);
             }
-            
-            // 显示弹窗
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            // 重新绑定关闭按钮
-            document.getElementById('modalClose').addEventListener('click', closeModal);
-        }
 
-        // 关闭弹窗
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
 
-        // 绑定所有点击事件
-        function bindCardClickEvents() {
-            // 主监控弹窗
-            document.getElementById('videoContainer').addEventListener('click', (e) => {
-                openModal(e.currentTarget);
-            });
-            
-            // RGB/IR/DETECT 弹窗
-            document.querySelectorAll('.detection-mode-card').forEach(card => {
-                card.addEventListener('click', () => openModal(card));
-            });
-            
-            // 底部指标弹窗
-            document.querySelectorAll('.metric-card').forEach(card => {
-                card.addEventListener('click', () => openModal(card));
-            });
-            
-            // 点击空白处关闭
-            modalOverlay.addEventListener('click', (e) => e.target === modalOverlay && closeModal());
-            // ESC键关闭
-            document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
-        }
+            function bindCardClickEvents() {
+                document.getElementById('videoContainer').addEventListener('click', (e) => {
+                    openModal(e.currentTarget);
+                });
+                document.querySelectorAll('.detection-mode-card').forEach(card => {
+                    card.addEventListener('click', () => openModal(card));
+                });
+                document.querySelectorAll('.metric-card').forEach(card => {
+                    card.addEventListener('click', () => openModal(card));
+                });
+                modalOverlay.addEventListener('click', (e) => e.target === modalOverlay && closeModal());
+                document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+            }
 
-        // 初始化
-        bindCardClickEvents();
-        testAlarmBtn.addEventListener('click', toggleTestAlarm);
-        document.getElementById('startSimulateBtn').addEventListener('click', startSimulate);
-        document.getElementById('pauseSimulateBtn').addEventListener('click', pauseSimulate);
-        updateTestAlarmButton(false);
-        pauseSimulate(); // 修复初始状态
-    })();
-</script>
+            bindCardClickEvents();
+            testAlarmBtn.addEventListener('click', toggleTestAlarm);
+            document.getElementById('startSimulateBtn').addEventListener('click', startSimulate);
+            document.getElementById('pauseSimulateBtn').addEventListener('click', pauseSimulate);
+            updateTestAlarmButton(false);
+            pauseSimulate();
+            updateConfidenceLevels('normal');
+        })();
+    </script>
 </body>
 </html>
