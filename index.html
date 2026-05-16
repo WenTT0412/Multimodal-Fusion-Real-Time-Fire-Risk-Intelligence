@@ -923,7 +923,6 @@
             text-align: center;
         }
 
-        /* 置信度数值样式（根据范围） */
         .confidence-value-safe {
             color: #2ecc71;
             border-color: #2ecc71;
@@ -943,7 +942,6 @@
             animation: alarmPulse 1s infinite;
         }
 
-        /* 风险等级样式 */
         .risk-level-safe {
             color: #2ecc71;
             border-color: #2ecc71;
@@ -989,7 +987,8 @@
                 </div>
                 <div class="video-preview" id="videoContainer" data-type="main-video" data-title="双光融合实时监控">
                     <div class="video-placeholder" id="videoPlaceholder">
-                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" class="live-monitor-img" alt="实时监控画面">
+                        <!-- ✅ 修改：本地图片 RGB.png -->
+                        <img src="RGB.png" class="live-monitor-img" alt="实时监控画面">
                         [ REAL-TIME MONITORING ]
                     </div>
                     <div class="detection-overlay" id="detectionBox">
@@ -1035,7 +1034,6 @@
                     </div>
                 </div>
 
-                <!-- 置信度判断板块（数值 + 风险等级） -->
                 <div class="confidence-section">
                     <div class="confidence-item">
                         <span class="confidence-item-label">置信度</span>
@@ -1297,8 +1295,9 @@
                 liveBtn.classList.add('active');
                 uploadBtn.classList.remove('active');
                 videoPlaceholder.className = 'video-placeholder';
+                // ✅ 修改：本地图片 RGB.png
                 videoPlaceholder.innerHTML = `
-                <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" 
+                <img src="RGB.png" 
                      class="live-monitor-img" 
                      alt="实时监控画面">
                 [ REAL-TIME MONITORING ]
@@ -1337,9 +1336,8 @@
                 const title = card.dataset.title;
                 modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
                 if (type === 'image' || type === 'main-video') {
-                    const src = type === 'main-video' ?
-                        "https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/0d1ff557d8f84db9ad57f4b490e6cf4a.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260430230034ABF6843444559120F7D1&rrcfp=d52e923b&x-expires=1778166034&x-signature=jHEQAYsgg625KggeNJGPnLn5ktI%3D" :
-                        card.dataset.src;
+                    // ✅ 修改：主视频框使用本地图片 RGB.png
+                    const src = type === 'main-video' ? "RGB.png" : card.dataset.src;
                     modalContent.innerHTML += `
                     <div class="modal-title">${title}</div>
                     <div class="modal-media-container">
