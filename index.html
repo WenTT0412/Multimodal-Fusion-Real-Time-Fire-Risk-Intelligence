@@ -987,7 +987,7 @@
                 </div>
                 <div class="video-preview" id="videoContainer" data-type="main-video" data-title="双光融合实时监控">
                     <div class="video-placeholder" id="videoPlaceholder">
-                        <!-- ✅ 修改：本地图片 RGB.png -->
+                        <!-- ✅ 本地图片 RGB.png -->
                         <img src="RGB.png" class="live-monitor-img" alt="实时监控画面">
                         [ REAL-TIME MONITORING ]
                     </div>
@@ -996,22 +996,25 @@
                     </div>
                 </div>
                 <div class="detection-modes">
-                    <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" data-src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D">
+                    <!-- ✅ 修改：RGB火焰检测使用本地 RGB.png -->
+                    <div class="detection-mode-card" data-type="image" data-title="RGB火焰检测" data-src="RGB.png">
                         <div class="mode-title">RGB</div>
                         <div class="mode-preview">
-                            <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/5be7ad93f8bb48dc95e58166bc2aa800.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429224806A3FC2B48A74A03921656&rrcfp=d52e923b&x-expires=1778078886&x-signature=5aHy9Mn7puJqekSSlFZw3dLkfy0%3D" class="mode-preview-img" alt="RGB火焰检测图">
+                            <img src="RGB.png" class="mode-preview-img" alt="RGB火焰检测图">
                         </div>
                     </div>
-                    <div class="detection-mode-card" data-type="image" data-title="红外火焰检测" data-src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D">
+                    <!-- ✅ 修改：红外火焰检测使用本地 IR.png -->
+                    <div class="detection-mode-card" data-type="image" data-title="红外火焰检测" data-src="IR.png">
                         <div class="mode-title">IR</div>
                         <div class="mode-preview">
-                            <img src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6e49f5c899d244d682a5c43f4ffe3a4b.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=202604292235405239F400A05E249CC640&rrcfp=d52e923b&x-expires=1778078140&x-signature=XzHIMkkT6OLSytPA%2BkQx6%2Bw80%2BU%3D" class="mode-preview-img" alt="红外火焰检测图">
+                            <img src="IR.png" class="mode-preview-img" alt="红外火焰检测图">
                         </div>
                     </div>
-                    <div class="detection-mode-card" data-type="image" data-title="火焰检测结果" data-src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D">
+                    <!-- ✅ 修改：火焰检测结果使用本地 detect.png -->
+                    <div class="detection-mode-card" data-type="image" data-title="火焰检测结果" data-src="detect.png">
                         <div class="mode-title">DETECT</div>
                         <div class="mode-preview">
-                            <img src="https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/4fdb67f59f644d4bb1ee5225779d40a2.png~tplv-a9rns2rl98-24:720:720.jpeg?lk3s=8e244e95&rcl=20260429223041AC91234F7D8AF9C422B7&rrcfp=d52e923b&x-expires=1778077841&x-signature=SklFnD7zHxaVTp3WDka1tauEjHs%3D" class="mode-preview-img" alt="火焰检测图">
+                            <img src="detect.png" class="mode-preview-img" alt="火焰检测图">
                         </div>
                     </div>
                 </div>
@@ -1295,7 +1298,6 @@
                 liveBtn.classList.add('active');
                 uploadBtn.classList.remove('active');
                 videoPlaceholder.className = 'video-placeholder';
-                // ✅ 修改：本地图片 RGB.png
                 videoPlaceholder.innerHTML = `
                 <img src="RGB.png" 
                      class="live-monitor-img" 
@@ -1336,7 +1338,7 @@
                 const title = card.dataset.title;
                 modalContent.innerHTML = '<div class="modal-close" id="modalClose">×</div>';
                 if (type === 'image' || type === 'main-video') {
-                    // ✅ 修改：主视频框使用本地图片 RGB.png
+                    // 主视频框使用本地 RGB.png，小框图片取自 data-src（已改为本地路径）
                     const src = type === 'main-video' ? "RGB.png" : card.dataset.src;
                     modalContent.innerHTML += `
                     <div class="modal-title">${title}</div>
